@@ -18,7 +18,8 @@ So we dropped JPA completely, started using JDBCTemplate and discovered that we 
 
 This project aims to explore other options in the SQL mapping area than just JDBCTemplate. It should serve us 
 - as point of reference when deciding for SQL mapping framework 
-- and as a template of common DB usage scenarios
+- as a template of common DB usage scenarios
+- to document best practices of such common usages (**comments are welcomed!**)
 
 
 Use code in the repository as you like (MIT License)
