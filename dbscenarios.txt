@@ -1,0 +1,12 @@
+1. Fetch single entity based on primary key
+2. Fetch list of entities based on condition
+3. Save new single entity and return primary key
+4. Batch insert multiple entities of same type and return generated keys
+5. Update single existing entity - update one field of the entity
+6. Fetch entity and it's manytoone relation (Company for Employee)
+7. Fetch entity and it's onetomany relation (Employees for Company)
+8. Update entitie's onetomany relation - add two items, update two items and delete one item
+9. Complex select - construct select where conditions based on some boolean conditions + throw in some outer joins
+10. Transactions handling
+11. Call stored procedure
+12. Optimistic locking
