@@ -6,6 +6,8 @@ import com.clevergang.dbtests.service.repository.ProductRepository;
 import org.springframework.stereotype.Component;
 
 /**
+ * Common scenarios
+ *
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
  */
 @Component
