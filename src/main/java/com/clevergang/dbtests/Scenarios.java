@@ -1,8 +1,5 @@
 package com.clevergang.dbtests;
 
-import com.clevergang.dbtests.service.repository.CompanyRepository;
-import com.clevergang.dbtests.service.repository.EmployeeRepository;
-import com.clevergang.dbtests.service.repository.ProductRepository;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,9 +9,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Scenarios {
-    private CompanyRepository companyRepository;
-    private EmployeeRepository employeeRepository;
-    private ProductRepository productRepository;
 
 
 
