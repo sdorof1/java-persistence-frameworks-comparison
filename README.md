@@ -7,7 +7,7 @@ We prepared some common scenarios, which you typically need to implement data-ce
 
 ## Model used
 
-
+![Simple company database model](/SimpleCompanyModel.png?raw=true "Simple company database model")
 
 ## Why only non-JPA?
 Well, we were trying to "stick with standard" in our projects in the past, but after many years of JPA usage
