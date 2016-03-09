@@ -1,12 +1,14 @@
 package com.clevergang.dbtests.model;
 
+import java.time.LocalDate;
+
 /**
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
  */
-public class Department {
+public class Project {
     private Integer pid;
-    private Integer department_pid;
     private String name;
+    private LocalDate date;
 
     public Integer getPid() {
         return pid;
@@ -24,12 +26,12 @@ public class Department {
         this.name = name;
     }
 
-    public Integer getDepartmentPid() {
-        return department_pid;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDepartmentPid(Integer department_pid) {
-        this.department_pid = department_pid;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override
@@ -39,31 +41,30 @@ public class Department {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Department that = (Department) o;
+        Project project = (Project) o;
 
-        if (pid != null ? !pid.equals(that.pid) : that.pid != null)
+        if (pid != null ? !pid.equals(project.pid) : project.pid != null)
             return false;
-        if (department_pid != null ? !department_pid.equals(that.department_pid) : that.department_pid != null)
+        if (name != null ? !name.equals(project.name) : project.name != null)
             return false;
-        return name != null ? name.equals(that.name) : that.name == null;
+        return date != null ? date.equals(project.date) : project.date == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = pid != null ? pid.hashCode() : 0;
-        result = 31 * result + (department_pid != null ? department_pid.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Department{" +
+        return "Project{" +
             "pid=" + pid +
-            ", department_pid=" + department_pid +
             ", name='" + name + '\'' +
+            ", date=" + date +
             '}';
     }
 }
-

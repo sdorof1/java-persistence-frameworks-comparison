@@ -7,10 +7,8 @@ package com.clevergang.dbtests.service.repository.impl.jooq.generated;
 import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Company;
 import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Department;
 import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Employee;
-import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.EmployeeDepartment;
-import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Product;
-import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.ProductCategory;
-import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.TimeTest;
+import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Project;
+import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Projectemployee;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +34,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-	private static final long serialVersionUID = 149753360;
+	private static final long serialVersionUID = -105092571;
 
 	/**
 	 * The reference instance of <code>public</code>
@@ -62,8 +60,7 @@ public class Public extends SchemaImpl {
 			Sequences.COMPANY_PID_SEQ,
 			Sequences.DEPARTMENT_PID_SEQ,
 			Sequences.EMPLOYEE_PID_SEQ,
-			Sequences.PRODUCT_CATEGORY_PID_SEQ,
-			Sequences.PRODUCT_PID_SEQ);
+			Sequences.PROJECT_PID_SEQ);
 	}
 
 	@Override
@@ -78,9 +75,7 @@ public class Public extends SchemaImpl {
 			Company.COMPANY,
 			Department.DEPARTMENT,
 			Employee.EMPLOYEE,
-			EmployeeDepartment.EMPLOYEE_DEPARTMENT,
-			Product.PRODUCT,
-			ProductCategory.PRODUCT_CATEGORY,
-			TimeTest.TIME_TEST);
+			Project.PROJECT,
+			Projectemployee.PROJECTEMPLOYEE);
 	}
 }

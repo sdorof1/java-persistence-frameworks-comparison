@@ -39,12 +39,7 @@ public class Sequences {
 	public static final Sequence<Long> EMPLOYEE_PID_SEQ = new SequenceImpl<Long>("employee_pid_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
 	/**
-	 * The sequence <code>public.product_category_pid_seq</code>
+	 * The sequence <code>public.project_pid_seq</code>
 	 */
-	public static final Sequence<Long> PRODUCT_CATEGORY_PID_SEQ = new SequenceImpl<Long>("product_category_pid_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
-
-	/**
-	 * The sequence <code>public.product_pid_seq</code>
-	 */
-	public static final Sequence<Long> PRODUCT_PID_SEQ = new SequenceImpl<Long>("product_pid_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
+	public static final Sequence<Long> PROJECT_PID_SEQ = new SequenceImpl<Long>("project_pid_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 }

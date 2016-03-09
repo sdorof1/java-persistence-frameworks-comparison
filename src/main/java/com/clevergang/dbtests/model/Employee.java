@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 public class Employee {
 
     private Integer pid;
-    private Integer company_pid;
+    private Integer department_pid;
     private String name;
     private String surname;
-    private String mail;
+    private String email;
     private BigDecimal salary;
 
     public Integer getPid() {
@@ -22,12 +22,12 @@ public class Employee {
         this.pid = pid;
     }
 
-    public Integer getCompany_pid() {
-        return company_pid;
+    public Integer getDepartmentPid() {
+        return department_pid;
     }
 
-    public void setCompany_pid(Integer company_pid) {
-        this.company_pid = company_pid;
+    public void setDepartmentPid(Integer department_pid) {
+        this.department_pid = department_pid;
     }
 
     public String getName() {
@@ -46,12 +46,12 @@ public class Employee {
         this.surname = surname;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public BigDecimal getSalary() {
@@ -73,13 +73,13 @@ public class Employee {
 
         if (pid != null ? !pid.equals(employee.pid) : employee.pid != null)
             return false;
-        if (company_pid != null ? !company_pid.equals(employee.company_pid) : employee.company_pid != null)
+        if (department_pid != null ? !department_pid.equals(employee.department_pid) : employee.department_pid != null)
             return false;
         if (name != null ? !name.equals(employee.name) : employee.name != null)
             return false;
         if (surname != null ? !surname.equals(employee.surname) : employee.surname != null)
             return false;
-        if (mail != null ? !mail.equals(employee.mail) : employee.mail != null)
+        if (email != null ? !email.equals(employee.email) : employee.email != null)
             return false;
         return salary != null ? salary.equals(employee.salary) : employee.salary == null;
 
@@ -88,10 +88,10 @@ public class Employee {
     @Override
     public int hashCode() {
         int result = pid != null ? pid.hashCode() : 0;
-        result = 31 * result + (company_pid != null ? company_pid.hashCode() : 0);
+        result = 31 * result + (department_pid != null ? department_pid.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
-        result = 31 * result + (mail != null ? mail.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (salary != null ? salary.hashCode() : 0);
         return result;
     }
@@ -100,10 +100,10 @@ public class Employee {
     public String toString() {
         return "Employee{" +
             "pid=" + pid +
-            ", company_pid=" + company_pid +
+            ", department_pid=" + department_pid +
             ", name='" + name + '\'' +
             ", surname='" + surname + '\'' +
-            ", mail='" + mail + '\'' +
+            ", email='" + email + '\'' +
             ", salary=" + salary +
             '}';
     }

@@ -4,14 +4,20 @@
 package com.clevergang.dbtests.service.repository.impl.jooq.generated.tables;
 
 
-import java.util.Arrays;
-import java.util.List;
-import javax.annotation.Generated;
-
 import com.clevergang.dbtests.service.repository.impl.jooq.generated.Keys;
 import com.clevergang.dbtests.service.repository.impl.jooq.generated.Public;
 import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.records.CompanyRecord;
-import org.jooq.*;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.jooq.Field;
+import org.jooq.Identity;
+import org.jooq.Table;
+import org.jooq.TableField;
+import org.jooq.UniqueKey;
 import org.jooq.impl.TableImpl;
 
 
@@ -28,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Company extends TableImpl<CompanyRecord> {
 
-	private static final long serialVersionUID = 195177633;
+	private static final long serialVersionUID = -1241354335;
 
 	/**
 	 * The reference instance of <code>public.company</code>

@@ -5,6 +5,10 @@ We are not comparing performance (that'll be maybe added later), but rather how 
 
 We prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA frameworks.
 
+## Model used
+
+
+
 ## Why only non-JPA?
 Well, we were trying to "stick with standard" in our projects in the past, but after many years of JPA usage
 (Hibernate mostly), we realized it's counterproductive. In most of our projects it caused more problems then 

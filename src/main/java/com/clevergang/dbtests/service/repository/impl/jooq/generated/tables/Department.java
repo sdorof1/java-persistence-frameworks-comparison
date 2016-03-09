@@ -14,6 +14,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -34,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Department extends TableImpl<DepartmentRecord> {
 
-	private static final long serialVersionUID = 2019535215;
+	private static final long serialVersionUID = 526103009;
 
 	/**
 	 * The reference instance of <code>public.department</code>
@@ -53,6 +54,11 @@ public class Department extends TableImpl<DepartmentRecord> {
 	 * The column <code>public.department.pid</code>.
 	 */
 	public final TableField<DepartmentRecord, Integer> PID = createField("pid", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>public.department.company_pid</code>.
+	 */
+	public final TableField<DepartmentRecord, Integer> COMPANY_PID = createField("company_pid", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>public.department.name</code>.
@@ -103,6 +109,14 @@ public class Department extends TableImpl<DepartmentRecord> {
 	@Override
 	public List<UniqueKey<DepartmentRecord>> getKeys() {
 		return Arrays.<UniqueKey<DepartmentRecord>>asList(Keys.DEPARTMENT_PKEY);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<ForeignKey<DepartmentRecord, ?>> getReferences() {
+		return Arrays.<ForeignKey<DepartmentRecord, ?>>asList(Keys.DEPARTMENT__DEPARTMENT_COMPANY_PID_FKEY);
 	}
 
 	/**

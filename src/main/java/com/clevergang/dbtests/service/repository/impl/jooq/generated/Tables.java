@@ -7,10 +7,8 @@ package com.clevergang.dbtests.service.repository.impl.jooq.generated;
 import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Company;
 import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Department;
 import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Employee;
-import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.EmployeeDepartment;
-import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Product;
-import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.ProductCategory;
-import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.TimeTest;
+import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Project;
+import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Projectemployee;
 
 import javax.annotation.Generated;
 
@@ -31,35 +29,25 @@ public class Tables {
 	/**
 	 * The table public.company
 	 */
-	public static final Company COMPANY = Company.COMPANY;
+	public static final Company COMPANY = com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Company.COMPANY;
 
 	/**
 	 * The table public.department
 	 */
-	public static final Department DEPARTMENT = Department.DEPARTMENT;
+	public static final Department DEPARTMENT = com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Department.DEPARTMENT;
 
 	/**
 	 * The table public.employee
 	 */
-	public static final Employee EMPLOYEE = Employee.EMPLOYEE;
+	public static final Employee EMPLOYEE = com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Employee.EMPLOYEE;
 
 	/**
-	 * The table public.employee_department
+	 * The table public.project
 	 */
-	public static final EmployeeDepartment EMPLOYEE_DEPARTMENT = EmployeeDepartment.EMPLOYEE_DEPARTMENT;
+	public static final Project PROJECT = com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Project.PROJECT;
 
 	/**
-	 * The table public.product
+	 * The table public.projectemployee
 	 */
-	public static final Product PRODUCT = Product.PRODUCT;
-
-	/**
-	 * The table public.product_category
-	 */
-	public static final ProductCategory PRODUCT_CATEGORY = ProductCategory.PRODUCT_CATEGORY;
-
-	/**
-	 * The table public.time_test
-	 */
-	public static final TimeTest TIME_TEST = TimeTest.TIME_TEST;
+	public static final Projectemployee PROJECTEMPLOYEE = com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.Projectemployee.PROJECTEMPLOYEE;
 }

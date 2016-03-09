@@ -36,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Employee extends TableImpl<EmployeeRecord> {
 
-	private static final long serialVersionUID = 1707869980;
+	private static final long serialVersionUID = 1353726777;
 
 	/**
 	 * The reference instance of <code>public.employee</code>
@@ -57,9 +57,9 @@ public class Employee extends TableImpl<EmployeeRecord> {
 	public final TableField<EmployeeRecord, Integer> PID = createField("pid", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>public.employee.company_pid</code>.
+	 * The column <code>public.employee.department_pid</code>.
 	 */
-	public final TableField<EmployeeRecord, Integer> COMPANY_PID = createField("company_pid", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final TableField<EmployeeRecord, Integer> DEPARTMENT_PID = createField("department_pid", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>public.employee.name</code>.
@@ -72,9 +72,9 @@ public class Employee extends TableImpl<EmployeeRecord> {
 	public final TableField<EmployeeRecord, String> SURNAME = createField("surname", org.jooq.impl.SQLDataType.VARCHAR.length(50).nullable(false), this, "");
 
 	/**
-	 * The column <code>public.employee.mail</code>.
+	 * The column <code>public.employee.email</code>.
 	 */
-	public final TableField<EmployeeRecord, String> MAIL = createField("mail", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
+	public final TableField<EmployeeRecord, String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
 
 	/**
 	 * The column <code>public.employee.salary</code>.
@@ -132,7 +132,7 @@ public class Employee extends TableImpl<EmployeeRecord> {
 	 */
 	@Override
 	public List<ForeignKey<EmployeeRecord, ?>> getReferences() {
-		return Arrays.<ForeignKey<EmployeeRecord, ?>>asList(Keys.EMPLOYEE__EMPLOYEE_COMPANY_PID_FKEY);
+		return Arrays.<ForeignKey<EmployeeRecord, ?>>asList(Keys.EMPLOYEE__EMPLOYEE_DEPARTMENT_PID_FKEY);
 	}
 
 	/**

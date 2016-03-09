@@ -1,77 +1,88 @@
 -- Meant for PostgreSQL --
 
-DROP TABLE product;
-DROP TABLE product_category;
-DROP TABLE employee_department;
-DROP TABLE department;
-DROP TABLE employee;
-DROP TABLE company;
+-- (re)create tables first
 
+DROP TABLE ProjectEmployee;
+DROP TABLE Project;
+DROP TABLE Employee;
+DROP TABLE Department;
+DROP TABLE Company;
 
-CREATE TABLE company (
+CREATE TABLE Company (
   pid SERIAL PRIMARY KEY,
   name VARCHAR(40) NOT NULL,
   address VARCHAR(128)
 );
 
-CREATE TABLE employee (
+CREATE TABLE Department (
   pid SERIAL PRIMARY KEY,
-  company_pid INTEGER NOT NULL REFERENCES company (pid) ON DELETE CASCADE,
-  name varchar(50) NOT NULL,
-  surname varchar(50) NOT NULL,
-  mail varchar(50),
-  salary numeric(10,2) CHECK (salary > 0)
-);
-
-CREATE TABLE department (
-  pid SERIAL PRIMARY KEY,
+  company_pid INTEGER NOT NULL REFERENCES Company (pid) ON DELETE CASCADE,
   name varchar(50) NOT NULL
 );
 
-CREATE TABLE employee_department (
-  employee_pid INTEGER NOT NULL REFERENCES employee (pid) ON DELETE CASCADE,
-  department_pid INTEGER NOT NULL REFERENCES department (pid) ON DELETE CASCADE,
-  UNIQUE (employee_pid, department_pid)
-);
-
-CREATE TABLE product_category (
+CREATE TABLE Employee (
   pid SERIAL PRIMARY KEY,
-  category varchar(50) NOT NULL
-);
-
-CREATE TABLE product (
-  pid SERIAL PRIMARY KEY,
-  product_category_pid INTEGER NOT NULL REFERENCES product_category (pid) ON DELETE CASCADE,
+  department_pid INTEGER NOT NULL REFERENCES Department (pid) ON DELETE CASCADE,
   name varchar(50) NOT NULL,
-  description varchar(50) NOT NULL,
-  row_status char(1) DEFAULT 'A',
-  price numeric(10,2) CHECK (price > 0)
+  surname varchar(50) NOT NULL,
+  email varchar(50),
+  salary numeric(10,2) CHECK (salary > 0)
 );
 
-INSERT INTO product_category (pid, category) values (1, 'Hardware');
-INSERT INTO product_category (pid, category) values (2, 'Software');
-INSERT INTO product_category (pid, category) values (3, 'Middleware');
+CREATE TABLE Project (
+  pid SERIAL PRIMARY KEY,
+  name varchar(50) NOT NULL,
+  dateStarted date
+);
 
-INSERT INTO public.company (name, address) VALUES('CleverGang', 'Chotikov 14, Chotikov 330 17');
-INSERT INTO public.company (name, address) VALUES('Querity', 'Manesova 44, Plzen');
+CREATE TABLE ProjectEmployee (
+  project_pid INTEGER REFERENCES Project,
+  employee_pid INTEGER REFERENCES Employee,
+  PRIMARY KEY (project_pid, employee_pid)
+);
+
+-- now insertProject some test data
+
+INSERT INTO Company (name, address) VALUES ('CleverGang', 'Prague, Czech Republic');
+INSERT INTO Company (name, address) VALUES ('Supersoft', 'Berlin, Germany');
+INSERT INTO Company (name, address) VALUES ('Pear', 'Cupertino, USA');
+
+INSERT INTO Department (company_pid, name) VALUES (1, 'Back office');
+INSERT INTO Department (company_pid, name) VALUES (1, 'IT Department');
+INSERT INTO Department (company_pid, name) VALUES (1, 'Software Development');
+INSERT INTO Department (company_pid, name) VALUES (2, 'Help desk');
+INSERT INTO Department (company_pid, name) VALUES (2, 'Sales');
+INSERT INTO Department (company_pid, name) VALUES (3, 'Hardware Development');
+
+-- names generated using listofrandomnames.com ;)
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (1, 'Curt', 'Odegaard', 'curt.odegaard@clevergang.com', 10000);
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (2, 'Rupert', 'Spradling', 'rupert.spradling@clevergang.com', 11000);
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (3, 'Carita', 'Ladouceur', 'carita.ladouceur@clevergang.com', 12000);
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (4, 'Abbie', 'Waring', 'abbie.waring@supersoft.com', 13000);
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (5, 'Cecily', 'Devaughn', 'cecily.devaughn@supersoft.com', 15000);
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (6, 'Yulanda', 'Grado', 'yulanda.grado@pear.com', 17000);
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (1, 'Chia', 'Kuder', 'chia.kuder@clevergang.com', 20000);
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (2, 'Alica', 'Iannotti', 'alica.iannotti@clevergang.com', 30000);
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (3, 'Estrella', 'Heroux', 'estrella.heroux@clevergang.com', 31000);
+INSERT INTO Employee (department_pid, name, surname, email, salary)
+  VALUES (4, 'Myrta', 'Lirette', 'myrta.lirette@supersoft.com', 50000);
 
 
-INSERT INTO public.employee (company_pid, name, surname, mail, salary)
-VALUES(1, 'Břetislav', 'Wajtr', 'bretislav.wajtr@clevergang.com', 35000);
-INSERT INTO public.employee (company_pid, name, surname, mail, salary)
-VALUES(1, 'Viktor', 'Janukovic', 'viktor.janukovic@clevergang.com', 10000);
-INSERT INTO public.employee (company_pid, name, surname, mail, salary)
-VALUES(1, 'Olga', 'Pravcová', 'olga.wajtrova@clevergang.com', 35000);
-INSERT INTO public.employee (company_pid, name, surname, mail, salary)
-VALUES(2, 'Jiri', 'Kiml', 'jiri.kiml@querity.cz', 49000);
+INSERT INTO Project (name, dateStarted) VALUES ('Awesome app', CURRENT_DATE);
+INSERT INTO Project (name, dateStarted) VALUES ('Desktop app', CURRENT_DATE);
 
 
-INSERT INTO public.department (name) VALUES('Development');
-INSERT INTO public.department (name) VALUES('Sales');
-
-
-INSERT INTO public.employee_department (employee_pid, department_pid) VALUES(1, 1);
-INSERT INTO public.employee_department (employee_pid, department_pid) VALUES(2, 1);
-INSERT INTO public.employee_department (employee_pid, department_pid) VALUES(3, 1);
-INSERT INTO public.employee_department (employee_pid, department_pid) VALUES(3, 2);
-
+INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (1, 1);
+INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (1, 2);
+INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (1, 9);
+INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (2, 10);
+INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (2, 5);

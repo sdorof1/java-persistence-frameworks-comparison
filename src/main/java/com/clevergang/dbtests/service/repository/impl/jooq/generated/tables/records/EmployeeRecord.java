@@ -30,7 +30,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implements Record6<Integer, Integer, String, String, String, BigDecimal> {
 
-	private static final long serialVersionUID = -1925509763;
+	private static final long serialVersionUID = -106446395;
 
 	/**
 	 * Setter for <code>public.employee.pid</code>.
@@ -47,16 +47,16 @@ public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implemen
 	}
 
 	/**
-	 * Setter for <code>public.employee.company_pid</code>.
+	 * Setter for <code>public.employee.department_pid</code>.
 	 */
-	public void setCompanyPid(Integer value) {
+	public void setDepartmentPid(Integer value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>public.employee.company_pid</code>.
+	 * Getter for <code>public.employee.department_pid</code>.
 	 */
-	public Integer getCompanyPid() {
+	public Integer getDepartmentPid() {
 		return (Integer) getValue(1);
 	}
 
@@ -89,16 +89,16 @@ public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implemen
 	}
 
 	/**
-	 * Setter for <code>public.employee.mail</code>.
+	 * Setter for <code>public.employee.email</code>.
 	 */
-	public void setMail(String value) {
+	public void setEmail(String value) {
 		setValue(4, value);
 	}
 
 	/**
-	 * Getter for <code>public.employee.mail</code>.
+	 * Getter for <code>public.employee.email</code>.
 	 */
-	public String getMail() {
+	public String getEmail() {
 		return (String) getValue(4);
 	}
 
@@ -161,7 +161,7 @@ public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implemen
 	 */
 	@Override
 	public Field<Integer> field2() {
-		return Employee.EMPLOYEE.COMPANY_PID;
+		return Employee.EMPLOYEE.DEPARTMENT_PID;
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implemen
 	 */
 	@Override
 	public Field<String> field5() {
-		return Employee.EMPLOYEE.MAIL;
+		return Employee.EMPLOYEE.EMAIL;
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implemen
 	 */
 	@Override
 	public Integer value2() {
-		return getCompanyPid();
+		return getDepartmentPid();
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implemen
 	 */
 	@Override
 	public String value5() {
-		return getMail();
+		return getEmail();
 	}
 
 	/**
@@ -258,7 +258,7 @@ public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implemen
 	 */
 	@Override
 	public EmployeeRecord value2(Integer value) {
-		setCompanyPid(value);
+		setDepartmentPid(value);
 		return this;
 	}
 
@@ -285,7 +285,7 @@ public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implemen
 	 */
 	@Override
 	public EmployeeRecord value5(String value) {
-		setMail(value);
+		setEmail(value);
 		return this;
 	}
 
@@ -326,14 +326,14 @@ public class EmployeeRecord extends UpdatableRecordImpl<EmployeeRecord> implemen
 	/**
 	 * Create a detached, initialised EmployeeRecord
 	 */
-	public EmployeeRecord(Integer pid, Integer companyPid, String name, String surname, String mail, BigDecimal salary) {
+	public EmployeeRecord(Integer pid, Integer departmentPid, String name, String surname, String email, BigDecimal salary) {
 		super(Employee.EMPLOYEE);
 
 		setValue(0, pid);
-		setValue(1, companyPid);
+		setValue(1, departmentPid);
 		setValue(2, name);
 		setValue(3, surname);
-		setValue(4, mail);
+		setValue(4, email);
 		setValue(5, salary);
 	}
 }
