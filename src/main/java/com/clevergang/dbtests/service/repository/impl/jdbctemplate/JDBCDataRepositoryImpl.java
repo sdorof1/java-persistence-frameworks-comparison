@@ -103,7 +103,30 @@ public class JDBCDataRepositoryImpl implements DataRepository {
 
         jdbcTemplate.batchUpdate(insertStatement, paramsList);
 
-        // FIXME JDBCTemplate cannot return IDs for batch update!!
+        // FIXME JDBCTemplate cannot return IDs for every row after batch update!!
         return null;
+    }
+
+    @Override
+    public void updateEmployee(Employee employeeToUpdate) {
+        logger.info("Updating employee using JDBC Template");
+
+        String updateStatement = " UPDATE EMPLOYEE SET " +
+            " department_pid = :department_pid, " +
+            " name = :name," +
+            " surname = :surname," +
+            " email = :email," +
+            " salary = :salary" +
+            " WHERE pid = :pid";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("department_pid", employeeToUpdate.getDepartmentPid());
+        params.addValue("name", employeeToUpdate.getName());
+        params.addValue("surname", employeeToUpdate.getSurname());
+        params.addValue("email", employeeToUpdate.getEmail());
+        params.addValue("salary", employeeToUpdate.getSalary());
+        params.addValue("pid", employeeToUpdate.getPid());
+
+        jdbcTemplate.update(updateStatement, params);
     }
 }

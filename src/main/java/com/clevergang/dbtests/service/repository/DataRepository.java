@@ -19,4 +19,5 @@ public interface DataRepository {
 
     List<Integer> insertAllProjects(List<Project> projects);
 
+    void updateEmployee(Employee employeeToUpdate);
 }

@@ -9,6 +9,7 @@ import com.clevergang.dbtests.model.Employee;
 import com.clevergang.dbtests.model.Project;
 import com.clevergang.dbtests.service.repository.DataRepository;
 import com.clevergang.dbtests.service.repository.impl.ImplBasedOn;
+import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.records.EmployeeRecord;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.slf4j.Logger;
@@ -96,6 +97,26 @@ public class JooqDataRepositoryImpl implements DataRepository {
 
         // FIXME Not even JOOQ can easily return newly generated ID's from batch operations
         return null;
+    }
+
+    @Override
+    public void updateEmployee(Employee employeeToUpdate) {
+        logger.info("Updating employee using JOOQ");
+
+        // If the DTO object passed into this method field names match field names in the EmployeeRecord,
+        // then it's easier to use Records when updating all fields of the entity at once:
+        EmployeeRecord record = create.newRecord(EMPLOYEE, employeeToUpdate);
+        create.executeUpdate(record);
+
+        // If the DTO object fields does not match the employee record, then you'll have to use mapping:
+        create.update(EMPLOYEE)
+            .set(EMPLOYEE.DEPARTMENT_PID, employeeToUpdate.getDepartmentPid())
+            .set(EMPLOYEE.NAME, employeeToUpdate.getName())
+            .set(EMPLOYEE.SURNAME, employeeToUpdate.getSurname())
+            .set(EMPLOYEE.EMAIL, employeeToUpdate.getEmail())
+            .set(EMPLOYEE.SALARY, employeeToUpdate.getSalary())
+            .where(EMPLOYEE.PID.eq(employeeToUpdate.getPid())) // <-- Do not forget to add where condition!
+            .execute();
     }
 
 }

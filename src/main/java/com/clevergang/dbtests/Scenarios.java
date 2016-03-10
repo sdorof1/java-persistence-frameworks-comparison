@@ -1,9 +1,11 @@
 package com.clevergang.dbtests;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clevergang.dbtests.model.Employee;
 import com.clevergang.dbtests.model.Project;
 import com.clevergang.dbtests.service.repository.DataRepository;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -72,9 +74,22 @@ public class Scenarios {
     }
 
     /**
-     * Update single existing entity - update one field of the entity
+     * Update single existing entity - update all fields of entity at once
      */
     public void scenarioFive() {
+        // Complete already store entity with all fields set - imagine that this object comes from UI edit dialog,
+        // which is typical scenario
+        Employee employeeToUpdate = new Employee();
+        employeeToUpdate.setPid(1);
+        employeeToUpdate.setDepartmentPid(1);
+        employeeToUpdate.setName("Curt");
+        employeeToUpdate.setSurname("Odegaard");
+        employeeToUpdate.setEmail("curt.odegaard@updated.com");  // <-- this is updated value
+        employeeToUpdate.setSalary(new BigDecimal("15000")); // <-- this is updated value
+
+        // now update the employee in DB
+        repository.updateEmployee(employeeToUpdate);
+
     }
 
     public void scenarioSix() {
