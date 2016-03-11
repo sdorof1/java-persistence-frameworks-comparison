@@ -61,7 +61,7 @@
 
             <!-- You can use this plugin to generate classes needed by Jooq -->
             <!-- Just run it using 'mvn jooq-codegen:generate' -->
-            <!-- Generated classes will go to  ./src/main/java/com/clevergang/dbtests/service/repository/impl/jooq/generated -->
+            <!-- Generated classes will go to  ./src/main/java/com/clevergang/dbtests/repository/repository/impl/jooq/generated -->
             <plugin>
 
                 <!-- Specify the maven code generator plugin -->
@@ -128,7 +128,7 @@
 
                         <target>
                             <!-- The destination package of your generated classes (within the destination directory) -->
-                            <packageName>com.clevergang.dbtests.service.repository.impl.jooq.generated</packageName>
+                            <packageName>com.clevergang.dbtests.repository.impl.jooq.generated</packageName>
 
                             <!-- The destination directory of your generated classes -->
                             <directory>./src/main/java/</directory>

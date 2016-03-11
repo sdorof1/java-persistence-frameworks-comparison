@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.clevergang.dbtests.model.Employee;
 import com.clevergang.dbtests.model.Project;
-import com.clevergang.dbtests.service.repository.DataRepository;
+import com.clevergang.dbtests.repository.DataRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

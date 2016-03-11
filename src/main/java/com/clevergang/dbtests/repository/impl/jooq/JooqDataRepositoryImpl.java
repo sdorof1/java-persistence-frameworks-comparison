@@ -1,4 +1,4 @@
-package com.clevergang.dbtests.service.repository.impl.jooq;
+package com.clevergang.dbtests.repository.impl.jooq;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -7,9 +7,8 @@ import java.util.List;
 import com.clevergang.dbtests.model.Company;
 import com.clevergang.dbtests.model.Employee;
 import com.clevergang.dbtests.model.Project;
-import com.clevergang.dbtests.service.repository.DataRepository;
-import com.clevergang.dbtests.service.repository.impl.ImplBasedOn;
-import com.clevergang.dbtests.service.repository.impl.jooq.generated.tables.records.EmployeeRecord;
+import com.clevergang.dbtests.repository.DataRepository;
+import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.EmployeeRecord;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.slf4j.Logger;
@@ -17,15 +16,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import static com.clevergang.dbtests.service.repository.impl.RepoImplementation.JOOQ;
-import static com.clevergang.dbtests.service.repository.impl.jooq.generated.Tables.*;
+import static com.clevergang.dbtests.repository.impl.jooq.generated.Tables.*;
 
 
 /**
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
  */
 @Repository
-@ImplBasedOn(JOOQ)
 public class JooqDataRepositoryImpl implements DataRepository {
     private static final Logger logger = LoggerFactory.getLogger(JooqDataRepositoryImpl.class);
 

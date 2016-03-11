@@ -1,4 +1,4 @@
-package com.clevergang.dbtests.service.repository;
+package com.clevergang.dbtests.repository;
 
 import java.util.List;
 

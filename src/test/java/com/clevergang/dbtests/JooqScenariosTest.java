@@ -1,7 +1,6 @@
 package com.clevergang.dbtests;
 
-import com.clevergang.dbtests.service.repository.DataRepository;
-import com.clevergang.dbtests.service.repository.impl.ImplBasedOn;
+import com.clevergang.dbtests.repository.impl.jooq.JooqDataRepositoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,8 +10,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.clevergang.dbtests.service.repository.impl.RepoImplementation.JOOQ;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = DbTestsApplication.class)
 @Transactional
@@ -20,8 +17,7 @@ import static com.clevergang.dbtests.service.repository.impl.RepoImplementation.
 public class JooqScenariosTest {
 
     @Autowired
-    @ImplBasedOn(JOOQ)
-    private DataRepository jooqRepository;
+    private JooqDataRepositoryImpl jooqRepository;
 
     protected Scenarios scenarios;
 
