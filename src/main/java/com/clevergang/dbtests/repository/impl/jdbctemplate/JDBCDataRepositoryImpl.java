@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.clevergang.dbtests.model.Company;
+import com.clevergang.dbtests.model.Department;
 import com.clevergang.dbtests.model.Employee;
 import com.clevergang.dbtests.model.Project;
 import com.clevergang.dbtests.repository.DataRepository;
@@ -46,6 +47,18 @@ public class JDBCDataRepositoryImpl implements DataRepository {
         logger.info("Found company: " + company);
 
         return company;
+    }
+
+    @Override
+    public Department findDepartment(Integer pid) {
+        String query = "SELECT pid, company_pid, name" +
+            "           FROM department " +
+            "           WHERE pid = :pid";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("pid", pid);
+
+        return jdbcTemplate.queryForObject(query, params, new BeanPropertyRowMapper<>(Department.class));
     }
 
     @Override

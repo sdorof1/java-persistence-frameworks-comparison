@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clevergang.dbtests.model.Company;
+import com.clevergang.dbtests.model.Department;
 import com.clevergang.dbtests.model.Employee;
 import com.clevergang.dbtests.model.Project;
 import com.clevergang.dbtests.repository.DataRepository;
@@ -92,8 +94,20 @@ public class Scenarios {
 
     }
 
+    /**
+     * Fetch many-to-one relation (Company for Department)
+     */
     public void scenarioSix() {
+        Department softwareDevelopmentDepartment = repository.findDepartment(3);
 
+        // Getting Company for Department (many-to-one relation) in JPA is quite easy. You typically have
+        // @ManyToOne relation defined in the Department entity class, so once you have instance of Department,
+        // you just call department.getCompany() and JPA does the magic for you (typically one or more lazy selects
+        // are executed). We don't have any such magical call here, but non-JPA approach is quite straightforward
+        // too: we have company_pid, so just ask DataRepository for the record:
+        Company company = repository.findCompany(softwareDevelopmentDepartment.getCompanyPid());
+
+        logger.info("Department {} is in the {} company", softwareDevelopmentDepartment.getName(), company.getName());
     }
 
     public void scenarioSeven() {

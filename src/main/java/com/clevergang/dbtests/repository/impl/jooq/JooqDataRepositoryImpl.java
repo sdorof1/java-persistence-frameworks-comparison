@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.clevergang.dbtests.model.Company;
+import com.clevergang.dbtests.model.Department;
 import com.clevergang.dbtests.model.Employee;
 import com.clevergang.dbtests.model.Project;
 import com.clevergang.dbtests.repository.DataRepository;
@@ -42,6 +43,14 @@ public class JooqDataRepositoryImpl implements DataRepository {
         logger.info("Found company: " + company);
 
         return company;
+    }
+
+    @Override
+    public Department findDepartment(Integer pid) {
+        return create.
+            selectFrom(DEPARTMENT)
+            .where(DEPARTMENT.PID.eq(pid))
+            .fetchOneInto(Department.class);
     }
 
     @Override
@@ -100,12 +109,13 @@ public class JooqDataRepositoryImpl implements DataRepository {
     public void updateEmployee(Employee employeeToUpdate) {
         logger.info("Updating employee using JOOQ");
 
-        // If the DTO object passed into this method field names match field names in the EmployeeRecord,
-        // then it's easier to use Records when updating all fields of the entity at once:
-        EmployeeRecord record = create.newRecord(EMPLOYEE, employeeToUpdate);
+        // If field names of the DTO object passed into this method match field names in the jooq Record class,
+        // then it's easier to use jooq Records when updating all fields of the entity at once (Employee field match EmployeeRecord fields):
+        EmployeeRecord record = new EmployeeRecord();
+        record.from(employeeToUpdate);  // <-- reflection based mapping, but you can use JPA @Column annotations too!
         create.executeUpdate(record);
 
-        // If the DTO object fields does not match the employee record, then you'll have to use mapping:
+        // If the DTO object fields do not match the employee record, then you'll have to use manual mapping:
         create.update(EMPLOYEE)
             .set(EMPLOYEE.DEPARTMENT_PID, employeeToUpdate.getDepartmentPid())
             .set(EMPLOYEE.NAME, employeeToUpdate.getName())

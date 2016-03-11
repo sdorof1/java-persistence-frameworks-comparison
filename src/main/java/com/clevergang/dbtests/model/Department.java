@@ -5,7 +5,7 @@ package com.clevergang.dbtests.model;
  */
 public class Department {
     private Integer pid;
-    private Integer department_pid;
+    private Integer company_pid;
     private String name;
 
     public Integer getPid() {
@@ -24,12 +24,12 @@ public class Department {
         this.name = name;
     }
 
-    public Integer getDepartmentPid() {
-        return department_pid;
+    public Integer getCompanyPid() {
+        return company_pid;
     }
 
-    public void setDepartmentPid(Integer department_pid) {
-        this.department_pid = department_pid;
+    public void setCompanyPid(Integer company_pid) {
+        this.company_pid = company_pid;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Department {
 
         if (pid != null ? !pid.equals(that.pid) : that.pid != null)
             return false;
-        if (department_pid != null ? !department_pid.equals(that.department_pid) : that.department_pid != null)
+        if (company_pid != null ? !company_pid.equals(that.company_pid) : that.company_pid != null)
             return false;
         return name != null ? name.equals(that.name) : that.name == null;
 
@@ -52,7 +52,7 @@ public class Department {
     @Override
     public int hashCode() {
         int result = pid != null ? pid.hashCode() : 0;
-        result = 31 * result + (department_pid != null ? department_pid.hashCode() : 0);
+        result = 31 * result + (company_pid != null ? company_pid.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
@@ -61,7 +61,7 @@ public class Department {
     public String toString() {
         return "Department{" +
             "pid=" + pid +
-            ", department_pid=" + department_pid +
+            ", company_pid=" + company_pid +
             ", name='" + name + '\'' +
             '}';
     }
