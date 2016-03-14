@@ -138,4 +138,16 @@ public class JDBCDataRepositoryImpl implements DataRepository {
 
         jdbcTemplate.update(updateStatement, params);
     }
+
+    @Override
+    public List<Department> getDepartmentsForCompany(Integer pid) {
+        String query = "SELECT pid, company_pid, name" +
+            "           FROM department " +
+            "           WHERE company_pid = :pid";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("pid", pid);
+
+        return jdbcTemplate.query(query, params, new BeanPropertyRowMapper<>(Department.class));
+    }
 }

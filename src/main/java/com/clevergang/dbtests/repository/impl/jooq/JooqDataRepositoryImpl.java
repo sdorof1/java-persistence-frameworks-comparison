@@ -126,5 +126,13 @@ public class JooqDataRepositoryImpl implements DataRepository {
             .execute();
     }
 
+    @Override
+    public List<Department> getDepartmentsForCompany(Integer pid) {
+        return create.
+            selectFrom(DEPARTMENT)
+            .where(DEPARTMENT.COMPANY_PID.eq(pid))
+            .fetchInto(Department.class);
+    }
+
 }
 

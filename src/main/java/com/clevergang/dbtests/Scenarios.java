@@ -110,8 +110,20 @@ public class Scenarios {
         logger.info("Department {} is in the {} company", softwareDevelopmentDepartment.getName(), company.getName());
     }
 
+    /**
+     * Fetch one-to-many relation (Departments for Company)
+     */
     public void scenarioSeven() {
+        Company company = repository.findCompany(1);
 
+        // For one-to-many relations the situation is quite similar to many-to-one relations (scenario six). In JPA this
+        // is "easy" - you define @OneToMany relation in the Company entity and then you just call getDepartments() method ->
+        // a lazy select is issued and Departments are fetched from DB. However you can also use EAGER FetchType strategy which
+        // causes the relation to load along with the primary entity - this behavior is (by our opinion) the source of all evil
+        // in JPA... So, in non-JPA approach, we don't have any "eager" loads, just explicit calls for data:
+        List<Department> departments = repository.getDepartmentsForCompany(company.getPid());
+
+        logger.info("There are {} departments in {} company", departments.size(), company.getName());
     }
 
     public void scenarioEight() {
