@@ -1,4 +1,4 @@
--- Meant for PostgreSQL --
+-- Meant for PostgreSQL 9.5  --
 
 -- (re)create tables first
 
@@ -53,6 +53,7 @@ INSERT INTO Department (company_pid, name) VALUES (1, 'Software Development');
 INSERT INTO Department (company_pid, name) VALUES (2, 'Help desk');
 INSERT INTO Department (company_pid, name) VALUES (2, 'Sales');
 INSERT INTO Department (company_pid, name) VALUES (3, 'Hardware Development');
+INSERT INTO Department (company_pid, name) VALUES (1, 'Lazy Department');
 
 -- names generated using listofrandomnames.com ;)
 INSERT INTO Employee (department_pid, name, surname, email, salary)

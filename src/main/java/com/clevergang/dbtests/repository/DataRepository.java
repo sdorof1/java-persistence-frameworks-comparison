@@ -1,11 +1,11 @@
 package com.clevergang.dbtests.repository;
 
-import java.util.List;
-
 import com.clevergang.dbtests.model.Company;
 import com.clevergang.dbtests.model.Department;
 import com.clevergang.dbtests.model.Employee;
 import com.clevergang.dbtests.model.Project;
+
+import java.util.List;
 
 /**
  * In "normal" application we would rather split the repository to multiple classes based on entity
@@ -16,17 +16,32 @@ import com.clevergang.dbtests.model.Project;
  */
 public interface DataRepository {
 
+    // companies
+
     Company findCompany(Integer pid);
+
+    // departments
 
     Department findDepartment(Integer pid);
 
-    List<Employee> employeesWithSalaryGreaterThan(Integer minSalary);
+    List<Department> findDepartmentsOfCompany(Company company);
+
+    void deleteDepartments(List<Department> departmentsToDelete);
+
+    void updateDepartments(List<Department> departmentsToUpdate);
+
+    void insertDepartments(List<Department> departmentsToInsert);
+
+    // projects
 
     Integer insertProject(Project project);
 
-    List<Integer> insertAllProjects(List<Project> projects);
+    List<Integer> insertProjects(List<Project> projects);
+
+    // employees
+
+    List<Employee> employeesWithSalaryGreaterThan(Integer minSalary);
 
     void updateEmployee(Employee employeeToUpdate);
 
-    List<Department> getDepartmentsForCompany(Integer pid);
 }

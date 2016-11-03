@@ -32,6 +32,14 @@ public class Department {
         this.company_pid = company_pid;
     }
 
+    public Department() {
+    }
+
+    public Department(Integer company_pid, String name) {
+        this.company_pid = company_pid;
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
