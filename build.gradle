@@ -32,11 +32,13 @@ tasks.withType(JavaCompile) {
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-jdbc"
     compile "org.springframework.boot:spring-boot-starter-jooq"
-    jooqRuntime "org.postgresql:postgresql:9.4.1211.jre7"
+    compile "org.postgresql:postgresql:9.4.1211.jre7"
     compile "org.apache.commons:commons-lang3:3.4"
     compile "org.apache.commons:commons-collections4:4.1"
 
     testCompile "org.springframework.boot:spring-boot-starter-test"
+
+    jooqRuntime "org.postgresql:postgresql:9.4.1211.jre7"
 }
 
 // we want to show following test events in the log
