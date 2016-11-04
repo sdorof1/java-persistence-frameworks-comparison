@@ -2,17 +2,12 @@
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE"  // to include SpringBoot parent BOM
-        classpath "nu.studer:gradle-jooq-plugin:2.0.2"  // to allow jooq gradle plugin
     }
 }
 
-apply plugin: 'nu.studer.jooq'  // see details in https://github.com/etiennestuder/gradle-jooq-plugin
 apply plugin: 'spring-boot'
 apply plugin: 'java'
 
@@ -37,8 +32,6 @@ dependencies {
     compile "org.apache.commons:commons-collections4:4.1"
 
     testCompile "org.springframework.boot:spring-boot-starter-test"
-
-    jooqRuntime "org.postgresql:postgresql:9.4.1211.jre7"
 }
 
 // we want to show following test events in the log
@@ -47,34 +40,3 @@ test {
         events "PASSED", "FAILED", "SKIPPED"
     }
 }
-
-// jooq configuration
-
-jooq {
-    version = '3.8.4'
-    edition = 'OSS'   // the default (can be omitted), other allowed values are PRO, PRO_JAVA_6, and TRIAL
-    DbTestsApplication(sourceSets.main) {
-        jdbc {
-            driver = 'org.postgresql.Driver'
-            url = 'jdbc:postgresql://localhost:5432/testdb'
-            user = 'test'
-            password = 'test'
-            schema = 'public'
-        }
-        generator {
-            name = 'org.jooq.util.DefaultGenerator'
-            strategy {
-                name = 'org.jooq.util.DefaultGeneratorStrategy'
-            }
-            database {
-                name = 'org.jooq.util.postgres.PostgresDatabase'
-                inputSchema = 'public'
-            }
-            target {
-                packageName = 'com.clevergang.dbtests.repository.impl.jooq.generated'
-                directory = './src/main/java/'
-            }
-        }
-    }
-}
-
