@@ -1,0 +1,44 @@
+// this buildscript modification is required for applying spring-boot parent BOM
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+    }
+}
+
+apply plugin: 'spring-boot'
+apply plugin: 'java'
+
+group = 'com.clevergang'
+version = '1.0.0'
+description = 'Comparison and common patterns for non-JPA SQL mapping frameworks for Java (Jooq, Spring JDBCTemplate etc.)'
+
+repositories {
+    jcenter()
+}
+
+// We need Java8 for this project
+tasks.withType(JavaCompile) {
+    sourceCompatibility = '1.8'
+}
+
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-jdbc"
+    compile "org.springframework.boot:spring-boot-starter-jooq"
+    compile "org.postgresql:postgresql:9.4.1211.jre7"
+    compile "org.apache.commons:commons-lang3:3.4"
+    compile "org.apache.commons:commons-collections4:4.1"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+}
+
+// we want to show following test events in the log
+test {
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}
