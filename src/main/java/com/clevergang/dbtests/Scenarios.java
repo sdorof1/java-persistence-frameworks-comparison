@@ -1,10 +1,7 @@
 package com.clevergang.dbtests;
 
-import com.clevergang.dbtests.model.Company;
-import com.clevergang.dbtests.model.Department;
-import com.clevergang.dbtests.model.Employee;
-import com.clevergang.dbtests.model.Project;
-import com.clevergang.dbtests.repository.DataRepository;
+import com.clevergang.dbtests.repository.api.data.*;
+import com.clevergang.dbtests.repository.api.DataRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -203,6 +200,20 @@ public class Scenarios {
         }
 
         return departments;
+    }
+
+
+    /**
+     * Execute complex query
+     *
+     * In our case we are executing following query:
+     * Query: get all projects, where the total cost of the project per month is greater than 70000. In the same resultset
+     * get all companies participating on such project along with cost of the project for the company.
+     */
+    public void scenarioNine() {
+        List<ProjectsWithCostsGreaterThanOutput> projectsWithCostsGreaterThan = repository.getProjectsWithCostsGreaterThan(70000);
+
+        logger.info("scenarioNine output: " + projectsWithCostsGreaterThan);
     }
 }
 

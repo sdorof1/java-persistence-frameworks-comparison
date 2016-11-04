@@ -1,6 +1,7 @@
-package com.clevergang.dbtests.model;
+package com.clevergang.dbtests.repository.api.data;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
@@ -36,27 +37,17 @@ public class Project {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Project project = (Project) o;
-
-        if (pid != null ? !pid.equals(project.pid) : project.pid != null)
-            return false;
-        if (name != null ? !name.equals(project.name) : project.name != null)
-            return false;
-        return date != null ? date.equals(project.date) : project.date == null;
-
+        return Objects.equals(pid, project.pid) &&
+                Objects.equals(name, project.name) &&
+                Objects.equals(date, project.date);
     }
 
     @Override
     public int hashCode() {
-        int result = pid != null ? pid.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        return result;
+        return Objects.hash(pid, name, date);
     }
 
     @Override

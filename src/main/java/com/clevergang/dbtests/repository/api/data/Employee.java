@@ -1,6 +1,7 @@
-package com.clevergang.dbtests.model;
+package com.clevergang.dbtests.repository.api.data;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
@@ -64,36 +65,20 @@ public class Employee {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-
-        if (pid != null ? !pid.equals(employee.pid) : employee.pid != null)
-            return false;
-        if (department_pid != null ? !department_pid.equals(employee.department_pid) : employee.department_pid != null)
-            return false;
-        if (name != null ? !name.equals(employee.name) : employee.name != null)
-            return false;
-        if (surname != null ? !surname.equals(employee.surname) : employee.surname != null)
-            return false;
-        if (email != null ? !email.equals(employee.email) : employee.email != null)
-            return false;
-        return salary != null ? salary.equals(employee.salary) : employee.salary == null;
-
+        return Objects.equals(pid, employee.pid) &&
+                Objects.equals(department_pid, employee.department_pid) &&
+                Objects.equals(name, employee.name) &&
+                Objects.equals(surname, employee.surname) &&
+                Objects.equals(email, employee.email) &&
+                Objects.equals(salary, employee.salary);
     }
 
     @Override
     public int hashCode() {
-        int result = pid != null ? pid.hashCode() : 0;
-        result = 31 * result + (department_pid != null ? department_pid.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (surname != null ? surname.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (salary != null ? salary.hashCode() : 0);
-        return result;
+        return Objects.hash(pid, department_pid, name, surname, email, salary);
     }
 
     @Override

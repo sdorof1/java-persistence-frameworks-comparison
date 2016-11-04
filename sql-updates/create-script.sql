@@ -73,9 +73,9 @@ INSERT INTO Employee (department_pid, name, surname, email, salary)
 INSERT INTO Employee (department_pid, name, surname, email, salary)
   VALUES (2, 'Alica', 'Iannotti', 'alica.iannotti@clevergang.com', 30000);
 INSERT INTO Employee (department_pid, name, surname, email, salary)
-  VALUES (3, 'Estrella', 'Heroux', 'estrella.heroux@clevergang.com', 31000);
+  VALUES (3, 'Estrella', 'Heroux', 'estrella.heroux@clevergang.com', 51000);
 INSERT INTO Employee (department_pid, name, surname, email, salary)
-  VALUES (4, 'Myrta', 'Lirette', 'myrta.lirette@supersoft.com', 50000);
+  VALUES (4, 'Myrta', 'Lirette', 'myrta.lirette@supersoft.com', 54250);
 
 
 INSERT INTO Project (name, dateStarted) VALUES ('Awesome app', CURRENT_DATE);
@@ -87,3 +87,4 @@ INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (1, 2);
 INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (1, 9);
 INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (2, 10);
 INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (2, 5);
+INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (1, 4);

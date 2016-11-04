@@ -1,20 +1,21 @@
 package com.clevergang.dbtests.repository.impl.jooq;
 
-import com.clevergang.dbtests.model.Company;
-import com.clevergang.dbtests.model.Department;
-import com.clevergang.dbtests.model.Employee;
-import com.clevergang.dbtests.model.Project;
-import com.clevergang.dbtests.repository.DataRepository;
+import com.clevergang.dbtests.repository.api.DataRepository;
+import com.clevergang.dbtests.repository.api.data.*;
 import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.DepartmentRecord;
 import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.EmployeeRecord;
-import org.jooq.BatchBindStep;
-import org.jooq.DSLContext;
+import org.jooq.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static com.clevergang.dbtests.repository.impl.jooq.generated.Tables.*;
 import static org.apache.commons.collections4.CollectionUtils.collect;
+import static org.jooq.impl.DSL.*;
 
 
 /**
@@ -129,6 +131,83 @@ public class JooqDataRepositoryImpl implements DataRepository {
                 .set(EMPLOYEE.SALARY, employeeToUpdate.getSalary())
                 .where(EMPLOYEE.PID.eq(employeeToUpdate.getPid())) // <-- Do not forget to add where condition!
                 .execute();
+    }
+
+    @Override
+    public List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsGreaterThan(int totalCostBoundary) {
+
+        // Actually there are two ways how to do complex queries in JOOQ:
+        // You can either use JOOQ DSL and construct the query using JOOQ methods and classes, like in this method here:
+        //
+        //  return getProjectsWithCostsUsingJooqDSL(totalCostBoundary);
+        //
+        // But I found this style of writing queries quite difficult to do and not much productive. JOOQ is excellent
+        // and unbeatable for simple queries, but for complex queries I find it simpler and more productive to go
+        // with native query and then let JOOQ only to map the result, like here:
+        return getProjectsWithCostsUsingNativeQuery(totalCostBoundary);
+    }
+
+    private List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsUsingNativeQuery(int totalCostBoundary) {
+        // FIXME: We should cache loaded scripts in real production code!
+        String query = loadSQLScript("queries/getProjectsWithCostsUsingNativeQuery.sql");
+
+        return create
+                .resultQuery(query, totalCostBoundary)
+                .fetchInto(ProjectsWithCostsGreaterThanOutput.class);
+    }
+
+    private String loadSQLScript(String resource) {
+        String content = null;
+        try {
+            @SuppressWarnings("ConstantConditions")
+            URI uri = getClass().getClassLoader().getResource(resource).toURI();
+            content = new String(Files.readAllBytes(Paths.get(uri)));
+        } catch (IOException | URISyntaxException e) {
+            // we can safely ignore these exceptions, if all is coded well, then
+            // there should be no problem in production
+            logger.error("Problem with SQL script loading", e);
+        }
+        return content;
+    }
+
+    @SuppressWarnings("unused")
+    private List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsUsingJooqDSL(int totalCostBoundary) {
+        CommonTableExpression<Record4<Integer, String, BigDecimal, String>> project_info =
+                name("project_info")
+                        .fields("project_pid", "project_name", "monthly_cost", "company_name")
+                        .as(select(PROJECT.PID, PROJECT.NAME, EMPLOYEE.SALARY, COMPANY.NAME)
+                                .from(PROJECT)
+                                .join(PROJECTEMPLOYEE).on(PROJECT.PID.eq(PROJECTEMPLOYEE.PROJECT_PID))
+                                .join(EMPLOYEE).on(PROJECTEMPLOYEE.EMPLOYEE_PID.eq(EMPLOYEE.PID))
+                                .leftJoin(DEPARTMENT).on(EMPLOYEE.DEPARTMENT_PID.eq(DEPARTMENT.PID))
+                                .leftJoin(COMPANY).on(DEPARTMENT.COMPANY_PID.eq(COMPANY.PID))
+                        );
+
+        Field<BigDecimal> monthly_cost = project_info.field("monthly_cost", BigDecimal.class);
+        Field<?> project_name = project_info.field("project_name");
+        Field<?> company_name = project_info.field("company_name");
+
+        CommonTableExpression<Record2<Integer, BigDecimal>> project_cost =
+                name("project_cost")
+                        .fields("project_pid", "total_cost")
+                        .as(select(project_info.field("project_pid", Integer.class), sum(monthly_cost))
+                                .from(project_info)
+                                .groupBy(project_info.field("project_pid"))
+                        );
+
+        Field<BigDecimal> total_cost = project_cost.field("total_cost", BigDecimal.class);
+
+        SelectHavingStep<? extends Record4<?, ?, ?, BigDecimal>> query = create
+                .with(project_info)
+                .with(project_cost)
+                .select(project_name, total_cost, company_name, sum(monthly_cost).as("company_cost"))
+                .from(project_info)
+                .join(project_cost).using(project_info.field("project_pid"))
+                .where(total_cost.greaterThan(new BigDecimal(totalCostBoundary)))
+                .groupBy(project_name, total_cost, company_name);
+
+
+        return query.fetchInto(ProjectsWithCostsGreaterThanOutput.class);
     }
 
     @Override

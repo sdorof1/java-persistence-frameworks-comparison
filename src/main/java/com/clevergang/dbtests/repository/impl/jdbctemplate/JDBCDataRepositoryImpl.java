@@ -1,10 +1,7 @@
 package com.clevergang.dbtests.repository.impl.jdbctemplate;
 
-import com.clevergang.dbtests.model.Company;
-import com.clevergang.dbtests.model.Department;
-import com.clevergang.dbtests.model.Employee;
-import com.clevergang.dbtests.model.Project;
-import com.clevergang.dbtests.repository.DataRepository;
+import com.clevergang.dbtests.repository.api.DataRepository;
+import com.clevergang.dbtests.repository.api.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,6 +148,41 @@ public class JDBCDataRepositoryImpl implements DataRepository {
         params.addValue("pid", employeeToUpdate.getPid());
 
         jdbcTemplate.update(updateStatement, params);
+    }
+
+    @Override
+    public List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsGreaterThan(int totalCostBoundary) {
+        String query;
+        query = "WITH project_info AS (\n" +
+                "    SELECT project.pid project_pid, project.name project_name, salary monthly_cost, company.name company_name\n" +
+                "    FROM project\n" +
+                "      JOIN projectemployee ON project.pid = projectemployee.project_pid\n" +
+                "      JOIN employee ON projectemployee.employee_pid = employee.pid\n" +
+                "      LEFT JOIN department ON employee.department_pid = department.pid\n" +
+                "      LEFT JOIN company ON department.company_pid = company.pid\n" +
+                "),\n" +
+                "project_cost AS (\n" +
+                "    SELECT project_pid, sum(monthly_cost) total_cost\n" +
+                "    FROM project_info GROUP BY project_pid\n" +
+                ")\n" +
+                "SELECT project_name, total_cost, company_name, sum(monthly_cost) company_cost FROM project_info\n" +
+                "  JOIN project_cost USING (project_pid)\n" +
+                "WHERE total_cost > :totalCostBoundary\n" +
+                "GROUP BY project_name, total_cost, company_name";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("totalCostBoundary", totalCostBoundary);
+
+        RowMapper<ProjectsWithCostsGreaterThanOutput> mapper = (rs, rowNum) -> {
+            ProjectsWithCostsGreaterThanOutput row = new ProjectsWithCostsGreaterThanOutput();
+            row.setProjectName(rs.getString("project_name"));
+            row.setTotalCost(rs.getBigDecimal("total_cost"));
+            row.setCompanyName(rs.getString("company_name"));
+            row.setCompanyCost(rs.getBigDecimal("company_cost"));
+            return row;
+        };
+
+        return jdbcTemplate.query(query, params, mapper);
     }
 
     @Override

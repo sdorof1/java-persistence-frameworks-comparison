@@ -1,4 +1,6 @@
-package com.clevergang.dbtests.model;
+package com.clevergang.dbtests.repository.api.data;
+
+import java.util.Objects;
 
 /**
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
@@ -35,27 +37,17 @@ public class Company {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Company company = (Company) o;
-
-        if (pid != null ? !pid.equals(company.pid) : company.pid != null)
-            return false;
-        if (name != null ? !name.equals(company.name) : company.name != null)
-            return false;
-        return address != null ? address.equals(company.address) : company.address == null;
-
+        return Objects.equals(pid, company.pid) &&
+                Objects.equals(name, company.name) &&
+                Objects.equals(address, company.address);
     }
 
     @Override
     public int hashCode() {
-        int result = pid != null ? pid.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        return result;
+        return Objects.hash(pid, name, address);
     }
 
     @Override

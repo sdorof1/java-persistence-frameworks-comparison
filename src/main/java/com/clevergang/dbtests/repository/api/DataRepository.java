@@ -1,9 +1,6 @@
-package com.clevergang.dbtests.repository;
+package com.clevergang.dbtests.repository.api;
 
-import com.clevergang.dbtests.model.Company;
-import com.clevergang.dbtests.model.Department;
-import com.clevergang.dbtests.model.Employee;
-import com.clevergang.dbtests.model.Project;
+import com.clevergang.dbtests.repository.api.data.*;
 
 import java.util.List;
 
@@ -44,4 +41,5 @@ public interface DataRepository {
 
     void updateEmployee(Employee employeeToUpdate);
 
+    List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsGreaterThan(int totalCostBoundary);
 }

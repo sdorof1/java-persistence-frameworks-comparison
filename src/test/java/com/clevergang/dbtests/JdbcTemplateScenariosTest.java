@@ -67,4 +67,10 @@ public class JdbcTemplateScenariosTest {
     public void scenarioEight() {
         scenarios.scenarioEight();
     }
+
+    @Test
+    public void scenarioNine() {
+        scenarios.scenarioNine();
+    }
+
 }
