@@ -7,19 +7,12 @@ package com.clevergang.dbtests.repository.impl.jooq.generated.tables;
 import com.clevergang.dbtests.repository.impl.jooq.generated.Keys;
 import com.clevergang.dbtests.repository.impl.jooq.generated.Public;
 import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.CompanyRecord;
-
-import java.util.Arrays;
-import java.util.List;
+import org.jooq.*;
+import org.jooq.impl.TableImpl;
 
 import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.Identity;
-import org.jooq.Schema;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.UniqueKey;
-import org.jooq.impl.TableImpl;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -35,7 +28,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Company extends TableImpl<CompanyRecord> {
 
-    private static final long serialVersionUID = 1404331086;
+    private static final long serialVersionUID = 662824552;
 
     /**
      * The reference instance of <code>public.company</code>
@@ -58,12 +51,12 @@ public class Company extends TableImpl<CompanyRecord> {
     /**
      * The column <code>public.company.name</code>.
      */
-    public final TableField<CompanyRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(40).nullable(false), this, "");
+    public final TableField<CompanyRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.company.address</code>.
      */
-    public final TableField<CompanyRecord, String> ADDRESS = createField("address", org.jooq.impl.SQLDataType.VARCHAR.length(128), this, "");
+    public final TableField<CompanyRecord, String> ADDRESS = createField("address", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>public.company</code> table reference
@@ -116,7 +109,7 @@ public class Company extends TableImpl<CompanyRecord> {
      */
     @Override
     public List<UniqueKey<CompanyRecord>> getKeys() {
-        return Arrays.<UniqueKey<CompanyRecord>>asList(Keys.COMPANY_PKEY);
+        return Arrays.<UniqueKey<CompanyRecord>>asList(Keys.COMPANY_PKEY, Keys.COMPANY_NAME_KEY);
     }
 
     /**

@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -183,6 +184,37 @@ public class JDBCDataRepositoryImpl implements DataRepository {
         };
 
         return jdbcTemplate.query(query, params, mapper);
+    }
+
+    @Override
+    public RegisterEmployeeOutput callRegisterEmployee(String name, String surname, String email, BigDecimal salary, String departmentName, String companyName) {
+        String query;
+        query = "SELECT employee_id, department_id, company_id FROM register_employee(\n" +
+                "  _name := :name, \n" +
+                "  _surname := :surname, \n" +
+                "  _email := :email, \n" +
+                "  _salary := :salary, \n" +
+                "  _department_name := :departmentName, \n" +
+                "  _company_name := :companyName\n" +
+                ")";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        params.put("surname", surname);
+        params.put("email", email);
+        params.put("salary", salary);
+        params.put("departmentName", departmentName);
+        params.put("companyName", companyName);
+
+        RowMapper<RegisterEmployeeOutput> mapper = (rs, rowNum) -> {
+            RegisterEmployeeOutput row = new RegisterEmployeeOutput();
+            row.setEmployeePid(rs.getInt("employee_id"));
+            row.setDepartmentPid(rs.getInt("department_id"));
+            row.setCompanyPid(rs.getInt("company_id"));
+            return row;
+        };
+
+        return jdbcTemplate.queryForObject(query, params, mapper);
     }
 
     @Override

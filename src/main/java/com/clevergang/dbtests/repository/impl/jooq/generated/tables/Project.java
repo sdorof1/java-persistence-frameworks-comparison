@@ -7,20 +7,13 @@ package com.clevergang.dbtests.repository.impl.jooq.generated.tables;
 import com.clevergang.dbtests.repository.impl.jooq.generated.Keys;
 import com.clevergang.dbtests.repository.impl.jooq.generated.Public;
 import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.ProjectRecord;
+import org.jooq.*;
+import org.jooq.impl.TableImpl;
 
+import javax.annotation.Generated;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.Identity;
-import org.jooq.Schema;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.UniqueKey;
-import org.jooq.impl.TableImpl;
 
 
 /**
@@ -36,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Project extends TableImpl<ProjectRecord> {
 
-    private static final long serialVersionUID = 403680808;
+    private static final long serialVersionUID = -1798885207;
 
     /**
      * The reference instance of <code>public.project</code>
@@ -59,7 +52,7 @@ public class Project extends TableImpl<ProjectRecord> {
     /**
      * The column <code>public.project.name</code>.
      */
-    public final TableField<ProjectRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(50).nullable(false), this, "");
+    public final TableField<ProjectRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.project.datestarted</code>.

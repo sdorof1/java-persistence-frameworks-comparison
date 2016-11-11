@@ -7,20 +7,12 @@ package com.clevergang.dbtests.repository.impl.jooq.generated.tables;
 import com.clevergang.dbtests.repository.impl.jooq.generated.Keys;
 import com.clevergang.dbtests.repository.impl.jooq.generated.Public;
 import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.DepartmentRecord;
-
-import java.util.Arrays;
-import java.util.List;
+import org.jooq.*;
+import org.jooq.impl.TableImpl;
 
 import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.ForeignKey;
-import org.jooq.Identity;
-import org.jooq.Schema;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.UniqueKey;
-import org.jooq.impl.TableImpl;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -36,7 +28,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Department extends TableImpl<DepartmentRecord> {
 
-    private static final long serialVersionUID = -1890573995;
+    private static final long serialVersionUID = 1675244566;
 
     /**
      * The reference instance of <code>public.department</code>
@@ -64,7 +56,7 @@ public class Department extends TableImpl<DepartmentRecord> {
     /**
      * The column <code>public.department.name</code>.
      */
-    public final TableField<DepartmentRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(50).nullable(false), this, "");
+    public final TableField<DepartmentRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * Create a <code>public.department</code> table reference

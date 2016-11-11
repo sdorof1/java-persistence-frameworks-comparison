@@ -4,23 +4,14 @@
 package com.clevergang.dbtests.repository.impl.jooq.generated;
 
 
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.Company;
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.Department;
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.Employee;
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.Project;
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.Projectemployee;
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.CompanyRecord;
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.DepartmentRecord;
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.EmployeeRecord;
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.ProjectRecord;
-import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.ProjectemployeeRecord;
-
-import javax.annotation.Generated;
-
+import com.clevergang.dbtests.repository.impl.jooq.generated.tables.*;
+import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.*;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.UniqueKey;
 import org.jooq.impl.AbstractKeys;
+
+import javax.annotation.Generated;
 
 
 /**
@@ -51,8 +42,10 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<CompanyRecord> COMPANY_PKEY = UniqueKeys0.COMPANY_PKEY;
+    public static final UniqueKey<CompanyRecord> COMPANY_NAME_KEY = UniqueKeys0.COMPANY_NAME_KEY;
     public static final UniqueKey<DepartmentRecord> DEPARTMENT_PKEY = UniqueKeys0.DEPARTMENT_PKEY;
     public static final UniqueKey<EmployeeRecord> EMPLOYEE_PKEY = UniqueKeys0.EMPLOYEE_PKEY;
+    public static final UniqueKey<EmployeeRecord> EMPLOYEE_NAME_SURNAME_UNIQUE = UniqueKeys0.EMPLOYEE_NAME_SURNAME_UNIQUE;
     public static final UniqueKey<ProjectRecord> PROJECT_PKEY = UniqueKeys0.PROJECT_PKEY;
     public static final UniqueKey<ProjectemployeeRecord> PROJECTEMPLOYEE_PKEY = UniqueKeys0.PROJECTEMPLOYEE_PKEY;
 
@@ -78,8 +71,10 @@ public class Keys {
 
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<CompanyRecord> COMPANY_PKEY = createUniqueKey(Company.COMPANY, "company_pkey", Company.COMPANY.PID);
+        public static final UniqueKey<CompanyRecord> COMPANY_NAME_KEY = createUniqueKey(Company.COMPANY, "company_name_key", Company.COMPANY.NAME);
         public static final UniqueKey<DepartmentRecord> DEPARTMENT_PKEY = createUniqueKey(Department.DEPARTMENT, "department_pkey", Department.DEPARTMENT.PID);
         public static final UniqueKey<EmployeeRecord> EMPLOYEE_PKEY = createUniqueKey(Employee.EMPLOYEE, "employee_pkey", Employee.EMPLOYEE.PID);
+        public static final UniqueKey<EmployeeRecord> EMPLOYEE_NAME_SURNAME_UNIQUE = createUniqueKey(Employee.EMPLOYEE, "employee_name_surname_unique", Employee.EMPLOYEE.NAME, Employee.EMPLOYEE.SURNAME);
         public static final UniqueKey<ProjectRecord> PROJECT_PKEY = createUniqueKey(Project.PROJECT, "project_pkey", Project.PROJECT.PID);
         public static final UniqueKey<ProjectemployeeRecord> PROJECTEMPLOYEE_PKEY = createUniqueKey(Projectemployee.PROJECTEMPLOYEE, "projectemployee_pkey", Projectemployee.PROJECTEMPLOYEE.PROJECT_PID, Projectemployee.PROJECTEMPLOYEE.EMPLOYEE_PID);
     }

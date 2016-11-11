@@ -1,5 +1,5 @@
 // You can invoke JOOQ code generation using this script.
-// Just run it from IDE, or use "gradle --rerun-tasks -b jooq.gradle"
+// Just run it from IDE, or to force code generation use "gradle --rerun-tasks -b jooq.gradle"
 
 buildscript {
     repositories {

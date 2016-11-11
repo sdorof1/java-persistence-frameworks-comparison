@@ -213,8 +213,19 @@ public class Scenarios {
     public void scenarioNine() {
         List<ProjectsWithCostsGreaterThanOutput> projectsWithCostsGreaterThan = repository.getProjectsWithCostsGreaterThan(70000);
 
-        logger.info("scenarioNine output: " + projectsWithCostsGreaterThan);
+        logger.info("scenarioNine output: {}", projectsWithCostsGreaterThan);
     }
+
+    /**
+     * Execute stored procedure/function and process results
+     *
+     */
+    public void scenarioTen() {
+        RegisterEmployeeOutput output = repository.callRegisterEmployee("Bretislav", "Wajtr", "bretislav.wajtr@test.com", new BigDecimal(40000), "MyDepartment", "MyCompany");
+
+        logger.info("scenarioTen output: {}", output);
+    }
+
 }
 
 

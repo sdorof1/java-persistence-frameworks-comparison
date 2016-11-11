@@ -2,6 +2,7 @@ package com.clevergang.dbtests.repository.api;
 
 import com.clevergang.dbtests.repository.api.data.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -35,11 +36,14 @@ public interface DataRepository {
 
     List<Integer> insertProjects(List<Project> projects);
 
+    List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsGreaterThan(int totalCostBoundary);
+
     // employees
 
     List<Employee> employeesWithSalaryGreaterThan(Integer minSalary);
 
     void updateEmployee(Employee employeeToUpdate);
 
-    List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsGreaterThan(int totalCostBoundary);
+    RegisterEmployeeOutput callRegisterEmployee(String name, String surname, String email, BigDecimal salary,
+                                                String departmentName, String companyName);
 }

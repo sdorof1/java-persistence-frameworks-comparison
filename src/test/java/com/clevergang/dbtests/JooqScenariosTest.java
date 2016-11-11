@@ -72,5 +72,12 @@ public class JooqScenariosTest {
     public void scenarioNine() {
         scenarios.scenarioNine();
     }
+
+    @Test
+    public void scenarioTen() {
+        scenarios.scenarioTen();
+    }
+
 }
+
 

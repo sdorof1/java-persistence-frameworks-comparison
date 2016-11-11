@@ -1,4 +1,6 @@
 -- Meant for PostgreSQL 9.5  --
+-- DO NOT FORGET TO EXECUTE ALSO sql_functions/register_employee.sql
+
 
 -- (re)create tables first
 
@@ -10,7 +12,7 @@ DROP TABLE Company;
 
 CREATE TABLE Company (
   pid SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
+  name TEXT NOT NULL UNIQUE,
   address TEXT
 );
 
@@ -21,13 +23,15 @@ CREATE TABLE Department (
 );
 
 CREATE TABLE Employee (
-  pid SERIAL PRIMARY KEY,
+  pid            SERIAL PRIMARY KEY,
   department_pid INTEGER NOT NULL REFERENCES Department (pid) ON DELETE CASCADE,
-  name TEXT NOT NULL,
-  surname TEXT NOT NULL,
-  email TEXT,
-  salary numeric(10,2) CHECK (salary > 0)
+  name           TEXT    NOT NULL,
+  surname        TEXT    NOT NULL,
+  email          TEXT,
+  salary         NUMERIC(10, 2) CHECK (salary > 0),
+  CONSTRAINT emloyee_name_surname_unique UNIQUE (name, surname)
 );
+
 
 CREATE TABLE Project (
   pid SERIAL PRIMARY KEY,
@@ -88,3 +92,4 @@ INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (1, 9);
 INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (2, 10);
 INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (2, 5);
 INSERT INTO ProjectEmployee (project_pid, employee_pid) VALUES (1, 4);
+

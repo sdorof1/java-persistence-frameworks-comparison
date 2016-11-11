@@ -7,21 +7,13 @@ package com.clevergang.dbtests.repository.impl.jooq.generated.tables;
 import com.clevergang.dbtests.repository.impl.jooq.generated.Keys;
 import com.clevergang.dbtests.repository.impl.jooq.generated.Public;
 import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.EmployeeRecord;
+import org.jooq.*;
+import org.jooq.impl.TableImpl;
 
+import javax.annotation.Generated;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.ForeignKey;
-import org.jooq.Identity;
-import org.jooq.Schema;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.UniqueKey;
-import org.jooq.impl.TableImpl;
 
 
 /**
@@ -37,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Employee extends TableImpl<EmployeeRecord> {
 
-    private static final long serialVersionUID = -1378985291;
+    private static final long serialVersionUID = -2096947570;
 
     /**
      * The reference instance of <code>public.employee</code>
@@ -65,17 +57,17 @@ public class Employee extends TableImpl<EmployeeRecord> {
     /**
      * The column <code>public.employee.name</code>.
      */
-    public final TableField<EmployeeRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(50).nullable(false), this, "");
+    public final TableField<EmployeeRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.employee.surname</code>.
      */
-    public final TableField<EmployeeRecord, String> SURNAME = createField("surname", org.jooq.impl.SQLDataType.VARCHAR.length(50).nullable(false), this, "");
+    public final TableField<EmployeeRecord, String> SURNAME = createField("surname", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.employee.email</code>.
      */
-    public final TableField<EmployeeRecord, String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
+    public final TableField<EmployeeRecord, String> EMAIL = createField("email", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>public.employee.salary</code>.
@@ -133,7 +125,7 @@ public class Employee extends TableImpl<EmployeeRecord> {
      */
     @Override
     public List<UniqueKey<EmployeeRecord>> getKeys() {
-        return Arrays.<UniqueKey<EmployeeRecord>>asList(Keys.EMPLOYEE_PKEY);
+        return Arrays.<UniqueKey<EmployeeRecord>>asList(Keys.EMPLOYEE_PKEY, Keys.EMPLOYEE_NAME_SURNAME_UNIQUE);
     }
 
     /**
