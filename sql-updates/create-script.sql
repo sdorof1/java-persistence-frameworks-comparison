@@ -10,28 +10,28 @@ DROP TABLE Company;
 
 CREATE TABLE Company (
   pid SERIAL PRIMARY KEY,
-  name VARCHAR(40) NOT NULL,
-  address VARCHAR(128)
+  name TEXT NOT NULL,
+  address TEXT
 );
 
 CREATE TABLE Department (
   pid SERIAL PRIMARY KEY,
   company_pid INTEGER NOT NULL REFERENCES Company (pid) ON DELETE CASCADE,
-  name varchar(50) NOT NULL
+  name TEXT NOT NULL
 );
 
 CREATE TABLE Employee (
   pid SERIAL PRIMARY KEY,
   department_pid INTEGER NOT NULL REFERENCES Department (pid) ON DELETE CASCADE,
-  name varchar(50) NOT NULL,
-  surname varchar(50) NOT NULL,
-  email varchar(50),
+  name TEXT NOT NULL,
+  surname TEXT NOT NULL,
+  email TEXT,
   salary numeric(10,2) CHECK (salary > 0)
 );
 
 CREATE TABLE Project (
   pid SERIAL PRIMARY KEY,
-  name varchar(50) NOT NULL,
+  name TEXT NOT NULL,
   dateStarted date
 );
 
