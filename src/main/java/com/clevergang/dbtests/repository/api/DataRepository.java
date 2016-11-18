@@ -18,6 +18,8 @@ public interface DataRepository {
 
     Company findCompany(Integer pid);
 
+    Company findCompanyUsingSimpleStaticStatement(Integer pid);
+
     // departments
 
     Department findDepartment(Integer pid);

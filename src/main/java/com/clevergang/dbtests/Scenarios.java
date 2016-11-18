@@ -218,7 +218,6 @@ public class Scenarios {
 
     /**
      * Execute stored procedure/function and process results
-     *
      */
     public void scenarioTen() {
         RegisterEmployeeOutput output = repository.callRegisterEmployee("Bretislav", "Wajtr", "bretislav.wajtr@test.com", new BigDecimal(40000), "MyDepartment", "MyCompany");
@@ -226,6 +225,24 @@ public class Scenarios {
         logger.info("scenarioTen output: {}", output);
     }
 
+
+    /**
+     * Execute query using JDBC simple Statement (not PreparedStatement)
+     *
+     * Motivation why we need the "static statement" feature: In 96% of the cases, you’re better off writing
+     * a PreparedStatement rather than a static statement - it's safer (sql injection),
+     * easier (complex data types like dates) and sometimes faster (prepared statements reuse). However, there are
+     * edge cases for complex queries and lot of data where it's actually faster to use simple statement query, because
+     * your database’s cost-based optimiser or planner obtains some heads-up about what kind of data is really going to
+     * be affected by the query and can therefore execute the query faster.
+     *
+     * Good SQL API framework should offer way how to execute simple static statements.
+     */
+    public void scenarioEleven() {
+        Company output = repository.findCompanyUsingSimpleStaticStatement(1);
+
+        logger.info("Output: {}", output);
+    }
 }
 
 

@@ -8,4 +8,4 @@
 8. Update entities one-to-many relation - add two items, update two items and delete one item
 9. Complex select - construct select where conditions based on some boolean conditions + throw in some joins
 10. Call stored procedure/function and process results
-11. Optimistic locking
+11. Execute query using JDBC simple Statement (not PreparedStatement)

@@ -7,9 +7,12 @@ import com.clevergang.dbtests.repository.impl.jooq.generated.routines.RegisterEm
 import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.DepartmentRecord;
 import com.clevergang.dbtests.repository.impl.jooq.generated.tables.records.EmployeeRecord;
 import org.jooq.*;
+import org.jooq.conf.Settings;
+import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -21,6 +24,7 @@ import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static com.clevergang.dbtests.repository.impl.jooq.generated.Tables.*;
@@ -39,6 +43,10 @@ public class JooqDataRepositoryImpl implements DataRepository {
     @Autowired
     private DSLContext create;
 
+    @Autowired
+    @Qualifier("static-statement-jooq-settings")
+    private Settings staticStatementSettings;
+
     @Override
     public Company findCompany(Integer pid) {
         logger.info("Finding Company by ID using JOOQ");
@@ -49,8 +57,32 @@ public class JooqDataRepositoryImpl implements DataRepository {
                 .fetchOneInto(Company.class);
 
         logger.info("Found company: " + company);
-
         return company;
+    }
+
+    @Override
+    public Company findCompanyUsingSimpleStaticStatement(Integer pid) {
+        // This is the only way I found how to actually do a static Statement in JOOQ (so not the default
+        // prepared statement, but simple static statement where you do not bind values). We create new instance of DSLContext
+        // using Settings which are configured to use static statements. The important factor here is
+        // to create new context based on the Connection of autowired DSLContext (therefore the usage of create.connection()
+        // method) - this is the only way to ensure that the this static statement will be executed in same transaction
+        // as other statements called through autowired DSLContext.
+        //
+        // If you create new DSLContext using the some generally available (autowired) datasource, then you'll create
+        // completely new JOOQ configuration with completely new connection -> such statements will be executed in
+        // their own transactions!
+        //
+        // FIXME: I don't like the usage of AtomicReference here to get the value out of the lambda. If anyone has better class where to store the value, please advise.
+        AtomicReference<Company> reference = new AtomicReference<>();
+        create.connection(connection -> {
+            DSLContext staticStatement = DSL.using(connection, create.dialect(), staticStatementSettings);
+            reference.set(staticStatement.
+                    selectFrom(COMPANY)
+                    .where(COMPANY.PID.eq(pid))
+                    .fetchOneInto(Company.class));
+        });
+        return reference.get();
     }
 
     @Override

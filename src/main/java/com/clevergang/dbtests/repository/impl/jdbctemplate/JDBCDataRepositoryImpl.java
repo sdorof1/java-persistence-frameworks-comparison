@@ -59,6 +59,33 @@ public class JDBCDataRepositoryImpl implements DataRepository {
     }
 
     @Override
+    public Company findCompanyUsingSimpleStaticStatement(Integer pid) {
+        String query;
+        query = "SELECT pid, address, name " +
+                "FROM company " +
+                "WHERE pid = " + pid;
+
+        RowMapper<Company> mapper = (rs, rowNum) -> {
+            Company row = new Company();
+            row.setPid(rs.getInt("pid"));
+            row.setAddress(rs.getString("address"));
+            row.setName(rs.getString("name"));
+            return row;
+        };
+
+        // In Spring's JDBCTemplate it's pretty easy to execute the query using static Statement (not the PreparedStatement):
+        // In this DAO we autowired NamedParameterJdbcTemplate, which does not allow static statements, but this class
+        // is just a wrapper around original JdbcTemplate which allows static statements -> so we used getJdbcOperations()
+        // to get such original object and then just used one of it's methods which internally calls the static
+        // statement (see javadoc for each JdbcOperations#query*() method)
+        Company company = jdbcTemplate.getJdbcOperations().queryForObject(query, mapper);
+
+        logger.info("Found company: " + company);
+
+        return company;
+    }
+
+    @Override
     public Department findDepartment(Integer pid) {
         String query;
         query = "SELECT pid, company_pid, name" +

@@ -78,6 +78,11 @@ public class JooqScenariosTest {
         scenarios.scenarioTen();
     }
 
+    @Test
+    public void scenarioEleven() {
+        scenarios.scenarioEleven();
+    }
+
 }
 
 
