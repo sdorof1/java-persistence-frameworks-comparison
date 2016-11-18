@@ -7,6 +7,7 @@ import java.util.Objects;
  *
  * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
  */
+@SuppressWarnings("unused")
 public class RegisterEmployeeOutput {
     private Integer companyPid;
     private Integer departmentPid;

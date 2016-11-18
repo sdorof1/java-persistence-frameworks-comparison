@@ -5,6 +5,7 @@ import java.util.Objects;
 /**
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
  */
+@SuppressWarnings("unused")
 public class Department {
     private Integer pid;
     private Integer company_pid;
@@ -32,9 +33,6 @@ public class Department {
 
     public void setCompanyPid(Integer company_pid) {
         this.company_pid = company_pid;
-    }
-
-    public Department() {
     }
 
     public Department(Integer company_pid, String name) {

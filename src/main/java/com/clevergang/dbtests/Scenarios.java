@@ -23,6 +23,7 @@ import static java.util.stream.Collectors.toList;
  *
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
  */
+@SuppressWarnings("WeakerAccess")
 public class Scenarios {
     private static final Logger logger = LoggerFactory.getLogger(Scenarios.class);
 

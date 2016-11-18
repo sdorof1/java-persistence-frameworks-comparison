@@ -8,6 +8,7 @@ import java.util.Objects;
  *
  * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
  */
+@SuppressWarnings("unused")
 public class ProjectsWithCostsGreaterThanOutput {
 
     private String projectName;

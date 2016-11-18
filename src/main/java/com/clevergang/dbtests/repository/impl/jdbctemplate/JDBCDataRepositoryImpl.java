@@ -218,6 +218,7 @@ public class JDBCDataRepositoryImpl implements DataRepository {
     @Override
     public RegisterEmployeeOutput callRegisterEmployee(String name, String surname, String email, BigDecimal salary, String departmentName, String companyName) {
         String query;
+        //noinspection SqlResolve
         query = "SELECT employee_id, department_id, company_id FROM register_employee(\n" +
                 "  _name := :name, \n" +
                 "  _surname := :surname, \n" +

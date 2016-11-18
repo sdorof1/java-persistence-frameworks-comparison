@@ -5,6 +5,7 @@ import java.util.Objects;
 /**
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
  */
+@SuppressWarnings("unused")
 public class Company {
 
     private Integer pid;
