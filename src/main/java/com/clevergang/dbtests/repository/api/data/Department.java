@@ -35,6 +35,10 @@ public class Department {
         this.company_pid = company_pid;
     }
 
+    public Department() {
+        // Actually jOOQ requires default constructor here
+    }
+
     public Department(Integer company_pid, String name) {
         this.company_pid = company_pid;
         this.name = name;

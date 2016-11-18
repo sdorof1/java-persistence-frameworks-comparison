@@ -35,6 +35,14 @@ Each scenario has it's implementation in the Scenarios class. See javadoc of [Sc
 
 ![Simple company database model](/SimpleCompanyModel.png?raw=true "Simple company database model")
 
+## How-to
+
+1. Clone the repository
+2. Configure PostgreSQL connection details in [application.properties](src/main/resources/application.properties)
+3. Create tables and data by running [create-script.sql](sql-updates/create-script.sql)
+4. Create one stored procedure by running [register_employee.sql](sql-updates/sql_functions/register_employee.sql)
+5. Give the scenarios a test run by running one of the test classes and enjoy :)
+
 ## Why only non-JPA?
 
 Well, we were trying to "stick with standard" in our projects so we used JPA in the past, but after many years of JPA usage (Hibernate mostly), we realized it's counterproductive. In most of our projects it caused more problems than it helped to solve - especially in big projects (with lots of tables and relations). There are many reasons of those failures - but the biggest issue is that JPA implementations simply turned into bloatware. Lot of strange magic is happening inside and the complexity is so high, that you need a high-class Hibernate uberexpert in every team so the app actually shows some performance and the code is manageable...
