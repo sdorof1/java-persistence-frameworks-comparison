@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
+ * This data class represents output of of complex query executed in DataRepository#getProjectsWithCostsGreaterThan
+ *
  * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
  */
 public class ProjectsWithCostsGreaterThanOutput {

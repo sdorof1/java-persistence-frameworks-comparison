@@ -3,27 +3,51 @@ Comparison of usage of non-JPA SQL mapping frameworks for Java (Jooq, Spring JDB
 
 We are not comparing performance (that'll be maybe added later), but rather how are these frameworks used for everyday tasks.
 
-We prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA frameworks.
+We prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA DB layer frameworks.
+
+## Frameworks compared
+
+* Spring JDBCTemplate (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jdbctemplate/JDBCDataRepositoryImpl.java))
+* jOOQ (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jooq/JooqDataRepositoryImpl.java))
+
+We tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments explaining why we chose to such implementation and some FIXMEs on places which we do not like, but which cannot be implemented differently or which we do not know how to improve...
+
+## Scenarios implemented
+
+These are the scenarios:
+1. Fetch single entity based on primary key
+2. Fetch list of entities based on condition
+3. Save new single entity and return primary key
+4. Batch insert multiple entities of same type and return generated keys
+5. Update single existing entity - update all fields of entity at once
+6. Fetch entity and it's many-to-one relation (Company for Department)
+7. Fetch entity and it's one-to-many relation (Departments for Company)
+8. Update entities one-to-many relation - add two items, update two items and delete one item
+9. Complex select - construct select where conditions based on some boolean conditions + throw in some joins
+10. Call stored procedure/function and process results
+11. Execute query using JDBC simple Statement (not PreparedStatement)
+
+See javadoc of [Scenarios](src/main/java/com/clevergang/dbtests/Scenarios.java) class for description of each scenario.
 
 ## Model used
 
 ![Simple company database model](/SimpleCompanyModel.png?raw=true "Simple company database model")
 
 ## Why only non-JPA?
-Well, we were trying to "stick with standard" in our projects in the past, but after many years of JPA usage
-(Hibernate mostly), we realized it's counterproductive. In most of our projects it caused more problems then 
+Well, we were trying to "stick with standard" in our projects so we used JPA in the past, but after many years of JPA usage
+(Hibernate mostly), we realized it's counterproductive. In most of our projects it caused more problems than
 it helped to solve - especially in big projects (with lots of tables and relations).
-There are many reasons of those failures - but the biggest issues are that JPA implementations simply turned into bloatware,
-lot of strange magic is happening inside and the complexity is so high, that you need a high-class Hibernate uberexpert
-in every team so the app actually shows some performance and the code is managable...
+There are many reasons of those failures - but the biggest issue is that JPA implementations simply turned into bloatware.
+Lot of strange magic is happening inside and the complexity is so high, that you need a high-class Hibernate uberexpert
+in every team so the app actually shows some performance and the code is manageable...
 
 So we dropped JPA completely, started using JDBCTemplate and discovered that we can deliver apps sooner
-(which was kind of surprising), they are god damn faster (thanks to effective use of DB) and much more robust... 
+(which was kind of surprising), they are a lot faster (thanks to effective use of DB) and much more robust...
+This was really relaxing and we do not plan to return to JPA at all... (yes, even for CRUD applications!)
 
 This project aims to explore other options in the SQL mapping area than just JDBCTemplate. It should serve us 
 - as point of reference when deciding for SQL mapping framework 
 - as a template of common DB usage scenarios
 - to document best practices of such common usages (**comments are welcomed!**)
-
 
 Use code in the repository as you like (MIT License)

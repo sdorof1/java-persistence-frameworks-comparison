@@ -16,7 +16,10 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Common scenarios
+ * Implementation of the scenarios. Note that the scenarios are always the same, what changes is the
+ * DB API implementation. To make things little bit easier for us we do not autowire the
+ * DB API implementation, but we pass it to the constructor of the Scenarios class instead - this
+ * isn't typical pattern we use in production code.
  *
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
  */

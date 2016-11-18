@@ -3,6 +3,8 @@ package com.clevergang.dbtests.repository.api.data;
 import java.util.Objects;
 
 /**
+ * Output of DB procedure call in DataRepository#callRegisterEmployee
+ *
  * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
  */
 public class RegisterEmployeeOutput {

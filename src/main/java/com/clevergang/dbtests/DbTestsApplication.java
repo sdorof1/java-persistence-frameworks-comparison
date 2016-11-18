@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+/**
+ * This whole thing is based on Spring Boot as we plan to use these frameworks with SpringBoot
+ */
 @SpringBootApplication
 @Configuration
 public class DbTestsApplication {

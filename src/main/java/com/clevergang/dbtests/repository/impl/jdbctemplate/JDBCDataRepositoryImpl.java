@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * Spring JDBCTemplate implementation of the DataRepository
+ *
  * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
  */
 @Repository
