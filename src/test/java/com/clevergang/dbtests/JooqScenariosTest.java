@@ -30,57 +30,57 @@ public class JooqScenariosTest {
 
     @Test
     public void scenarioOne() {
-        scenarios.scenarioOne();
+        scenarios.fetchSingleEntityScenario(1);
     }
 
     @Test
     public void scenarioTwo() {
-        scenarios.scenarioTwo();
+        scenarios.fetchListOfEntitiesScenario(2000);
     }
 
     @Test
     public void scenarioThree() {
-        scenarios.scenarioThree();
+        scenarios.saveNewEntityScenario();
     }
 
     @Test
     public void scenarioFour() {
-        scenarios.scenarioFour();
+        scenarios.batchInsertMultipleEntitiesScenario();
     }
 
     @Test
     public void scenarioFive() {
-        scenarios.scenarioFive();
+        scenarios.updateCompleteEntityScenario();
     }
 
     @Test
     public void scenarioSix() {
-        scenarios.scenarioSix();
+        scenarios.fetchManyToOneRelationScenario();
     }
 
     @Test
     public void scenarioSeven() {
-        scenarios.scenarioSeven();
+        scenarios.fetchOneToManyRelationScenario();
     }
 
     @Test
     public void scenarioEight() {
-        scenarios.scenarioEight();
+        scenarios.updateCompleteOneToManyRelationScenario();
     }
 
     @Test
     public void scenarioNine() {
-        scenarios.scenarioNine();
+        scenarios.executeComplexSelectScenario();
     }
 
     @Test
     public void scenarioTen() {
-        scenarios.scenarioTen();
+        scenarios.callStoredProcedureScenario();
     }
 
     @Test
     public void scenarioEleven() {
-        scenarios.scenarioEleven();
+        scenarios.executeSimpleStaticStatementScenario();
     }
 
 }

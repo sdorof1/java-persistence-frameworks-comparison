@@ -1,7 +1,7 @@
 package com.clevergang.dbtests;
 
-import com.clevergang.dbtests.repository.api.data.*;
 import com.clevergang.dbtests.repository.api.DataRepository;
+import com.clevergang.dbtests.repository.api.data.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -27,32 +27,41 @@ import static java.util.stream.Collectors.toList;
 public class Scenarios {
     private static final Logger logger = LoggerFactory.getLogger(Scenarios.class);
 
-    private DataRepository repository;
+    private final DataRepository repository;
 
     public Scenarios(DataRepository repository) {
         this.repository = repository;
     }
 
     /**
-     * Load single entity based on primary key
+     * 1. Fetch single entity based on primary key
+     * <br/>
+     * This is the case when pid comes from outside (typically from UI) and we need to fetch complete record from database.
+     *
+     * @param companyPid Primary key of the record coming from outside
      */
-    public void scenarioOne() {
-        Integer pid = 1;
-        repository.findCompany(pid);
+    public void fetchSingleEntityScenario(Integer companyPid) {
+        Company company = repository.findCompany(companyPid);
+
+        logger.info("Fetched result: {}", company);
     }
 
     /**
-     * Load list of entities based on condition
+     * 2. Fetch list of entities based on condition
+     * <br/>
+     * This is a case when we want to get records from database using some kind of filter. Filter values typically come from UI.
+     * @param employeeMinSalary Example of external filter value
      */
-    public void scenarioTwo() {
-        Integer minSalary = 2000;
-        repository.employeesWithSalaryGreaterThan(minSalary);
+    public void fetchListOfEntitiesScenario(Integer employeeMinSalary) {
+        List<Employee> employees = repository.employeesWithSalaryGreaterThan(employeeMinSalary);
+
+        logger.info("Fetched result: {}", employees);
     }
 
     /**
-     * Save new single entity and return primary key
+     * 3. Save new single entity and return primary key
      */
-    public void scenarioThree() {
+    public void saveNewEntityScenario() {
         Project project = new Project();
         project.setName("TestProject");
         project.setDate(LocalDate.now());
@@ -61,9 +70,15 @@ public class Scenarios {
     }
 
     /**
-     * Batch insertProject multiple entities of same type and return generated keys
+     * 4. Batch insert multiple entities of same type and return generated keys
+     * <br/>
+     * This scenario represents a situation, when business method, as a result of it's execution, wants to store
+     * multiple records of same type into database effectively.
+     * </br>
+     * In our scenario method, we create 1000 products first and then we want to store them into the database
+     * as fast as we can - through batch insert functionality.
      */
-    public void scenarioFour() {
+    public void batchInsertMultipleEntitiesScenario() {
         // create a list of thousand products
         List<Project> projects = new ArrayList<>();
         StopWatch watch = new StopWatch();
@@ -80,11 +95,23 @@ public class Scenarios {
     }
 
     /**
-     * Update single existing entity - update all fields of entity at once
+     * 5. Update single existing entity - update all fields of entity at once
+     * <br/>
+     * This scenario covers typical situation in information systems where a detail of a record is displayed in UI, user
+     * has possibility to modify any field of the record and then he/she presses Save button -> complete record data are sent
+     * back to server and the record should be updated in database.
      */
-    public void scenarioFive() {
-        // Complete already store entity with all fields set - imagine that this object comes from UI edit dialog,
-        // which is typical scenario
+    public void updateCompleteEntityScenario() {
+        // Imagine that this object comes from UI edit dialog, which is typical scenario
+        Employee employeeToUpdate = performSomeEmployeeRecordUpdateInUI();
+
+        // SCENARIO CODE STARTS HERE - update the employee in DB
+
+        repository.updateEmployee(employeeToUpdate);
+
+    }
+
+    private Employee performSomeEmployeeRecordUpdateInUI() {
         Employee employeeToUpdate = new Employee();
         employeeToUpdate.setPid(1);
         employeeToUpdate.setDepartmentPid(1);
@@ -92,16 +119,13 @@ public class Scenarios {
         employeeToUpdate.setSurname("Odegaard");
         employeeToUpdate.setEmail("curt.odegaard@updated.com");  // <-- this is updated value
         employeeToUpdate.setSalary(new BigDecimal("15000")); // <-- this is updated value
-
-        // now update the employee in DB
-        repository.updateEmployee(employeeToUpdate);
-
+        return employeeToUpdate;
     }
 
     /**
-     * Fetch many-to-one relation (Company for Department)
+     * 6. Fetch many-to-one relation (Company for Department)
      */
-    public void scenarioSix() {
+    public void fetchManyToOneRelationScenario() {
         Department softwareDevelopmentDepartment = repository.findDepartment(3);
 
         // Getting Company for Department (many-to-one relation) in JPA is quite easy. You typically have
@@ -115,9 +139,9 @@ public class Scenarios {
     }
 
     /**
-     * Fetch one-to-many relation (Departments for Company)
+     * 7. Fetch one-to-many relation (Departments for Company)
      */
-    public void scenarioSeven() {
+    public void fetchOneToManyRelationScenario() {
         Company company = repository.findCompany(1);
 
         // For one-to-many relations the situation is quite similar to many-to-one relations (scenario six). In JPA this
@@ -131,7 +155,7 @@ public class Scenarios {
     }
 
     /**
-     * Update one-to-many relation (Departments in Company) at once - add two items, update one items and delete one item.
+     * 8. Update entities one-to-many relation (Departments in Company) - add two items, update two items and delete one item - all at once
      * <br/>
      * This scenario covers situation where we have no idea what operations were performed by the user. We only
      * have new list of Departments and we have to efficiently update DB so it exactly reflects new Departments list.
@@ -141,7 +165,7 @@ public class Scenarios {
      * which were only updated have some additional relations in the database? -> if we delete them, we will delete also those relations ->
      * always ask yourself if this is something you want (or you want risk).
      */
-    public void scenarioEight() {
+    public void updateCompleteOneToManyRelationScenario() {
         Company company = repository.findCompany(1); // Clevergang company
 
         // this call simulates what typically happens in UI - the user chooses new list of departments for company
@@ -149,6 +173,9 @@ public class Scenarios {
         // UI to business service a List<Department> with no information about what departments were deleted or which
         // ones were updated - the business service has to determine these changes - which is what rest of the code in this method does
         List<Department> newDepartments = createNewDepartmentsList(company);
+
+
+        // SCENARIO CODE STARTS HERE - update departments in DB
 
         updateDepartments(company, newDepartments);
 
@@ -190,7 +217,7 @@ public class Scenarios {
         // delete one item
         departments.removeIf(department -> department.getName().equals("Lazy Department"));
 
-        // add two items (notice they don't have thier own pid yet)
+        // add two items (notice they don't have their own pid yet)
         departments.add(new Department(company.getPid(), "New department 1"));
         departments.add(new Department(company.getPid(), "New department 2"));
 
@@ -208,41 +235,41 @@ public class Scenarios {
 
 
     /**
-     * Execute complex query
-     *
-     * In our case we are executing following query:
-     * Query: get all projects, where the total cost of the project per month is greater than 70000. In the same resultset
+     * 9. Complex select - construct select where conditions based on some boolean conditions + throw in some joins
+     * <br/>
+     * In our case we are executing following query:<br/>
+     * Query: get all projects, where the total cost of the project per month is greater than 70000. In the same result set
      * get all companies participating on such project along with cost of the project for the company.
      */
-    public void scenarioNine() {
+    public void executeComplexSelectScenario() {
         List<ProjectsWithCostsGreaterThanOutput> projectsWithCostsGreaterThan = repository.getProjectsWithCostsGreaterThan(70000);
 
-        logger.info("scenarioNine output: {}", projectsWithCostsGreaterThan);
+        logger.info("executeComplexSelectScenario output: {}", projectsWithCostsGreaterThan);
     }
 
     /**
-     * Execute stored procedure/function and process results
+     * 10. Call stored procedure/function and process results
      */
-    public void scenarioTen() {
+    public void callStoredProcedureScenario() {
         RegisterEmployeeOutput output = repository.callRegisterEmployee("Bretislav", "Wajtr", "bretislav.wajtr@test.com", new BigDecimal(40000), "MyDepartment", "MyCompany");
 
-        logger.info("scenarioTen output: {}", output);
+        logger.info("callStoredProcedureScenario output: {}", output);
     }
 
 
     /**
-     * Execute query using JDBC simple Statement (not PreparedStatement)
-     *
+     * 11. Execute query using JDBC simple Statement (not PreparedStatement)
+     * <br/>
      * Motivation why we need the "static statement" feature: In 96% of the cases, you’re better off writing
      * a PreparedStatement rather than a static statement - it's safer (sql injection),
      * easier (complex data types like dates) and sometimes faster (prepared statements reuse). However, there are
      * edge cases for complex queries and lot of data where it's actually faster to use simple statement query, because
      * your database’s cost-based optimiser or planner obtains some heads-up about what kind of data is really going to
      * be affected by the query and can therefore execute the query faster.
-     *
+     * <p>
      * Good SQL API framework should offer way how to execute simple static statements.
      */
-    public void scenarioEleven() {
+    public void executeSimpleStaticStatementScenario() {
         Company output = repository.findCompanyUsingSimpleStaticStatement(1);
 
         logger.info("Output: {}", output);
