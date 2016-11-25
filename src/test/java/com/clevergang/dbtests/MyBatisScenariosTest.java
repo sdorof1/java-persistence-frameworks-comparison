@@ -40,7 +40,7 @@ public class MyBatisScenariosTest {
 
     @Test
     public void scenarioTwo() {
-        scenarios.fetchListOfEntitiesScenario(2000);
+        scenarios.fetchListOfEntitiesScenario(25000);
     }
 
     @Test

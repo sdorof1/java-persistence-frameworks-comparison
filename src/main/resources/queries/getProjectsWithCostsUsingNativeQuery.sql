@@ -15,3 +15,4 @@ SELECT project_name, total_cost, company_name, sum(monthly_cost) company_cost FR
   JOIN project_cost USING (project_pid)
 WHERE total_cost > ?
 GROUP BY project_name, total_cost, company_name
+ORDER BY company_name

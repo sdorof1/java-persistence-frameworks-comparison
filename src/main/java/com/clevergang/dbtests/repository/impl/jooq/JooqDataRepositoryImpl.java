@@ -110,13 +110,15 @@ public class JooqDataRepositoryImpl implements DataRepository {
     public Integer insertProject(Project project) {
         logger.info("Inserting project using JOOQ");
 
-        return create
+        Integer pid = create
                 .insertInto(PROJECT)
                 .set(PROJECT.NAME, project.getName())
                 .set(PROJECT.DATESTARTED, Date.valueOf(project.getDate()))
                 .returning(PROJECT.PID)
                 .fetchOne()
                 .getPid();
+
+        return pid;
     }
 
     @Override
@@ -175,12 +177,17 @@ public class JooqDataRepositoryImpl implements DataRepository {
         // Actually there are two ways how to do complex queries in JOOQ:
         // You can either use JOOQ DSL and construct the query using JOOQ methods and classes, like in this method here:
         //
-        //  return getProjectsWithCostsUsingJooqDSL(totalCostBoundary);
+        //   return getProjectsWithCostsUsingJooqDSL(totalCostBoundary);
         //
         // But I found this style of writing queries quite difficult to do and not much productive. JOOQ is excellent
         // and unbeatable for simple queries, but for complex queries I find it simpler and more productive to go
         // with native query and then let JOOQ only to map the result, like here:
         return getProjectsWithCostsUsingNativeQuery(totalCostBoundary);
+    }
+
+    @Override
+    public Employee findEmployee(Integer pid) {
+        return create.selectFrom(EMPLOYEE).where(EMPLOYEE.PID.eq(pid)).fetchOneInto(Employee.class);
     }
 
     @Override
@@ -195,6 +202,11 @@ public class JooqDataRepositoryImpl implements DataRepository {
         result.setEmployeePid(output.getEmployeeId());
 
         return result;
+    }
+
+    @Override
+    public Integer getProjectsCount() {
+        return create.selectCount().from(PROJECT).fetchOneInto(Integer.class);
     }
 
     private List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsUsingNativeQuery(int totalCostBoundary) {
@@ -247,14 +259,15 @@ public class JooqDataRepositoryImpl implements DataRepository {
 
         Field<BigDecimal> total_cost = project_cost.field("total_cost", BigDecimal.class);
 
-        SelectHavingStep<? extends Record4<?, ?, ?, BigDecimal>> query = create
+        SelectSeekStep1<? extends Record4<?, BigDecimal, ?, BigDecimal>, ?> query = create
                 .with(project_info)
                 .with(project_cost)
                 .select(project_name, total_cost, company_name, sum(monthly_cost).as("company_cost"))
                 .from(project_info)
                 .join(project_cost).using(project_info.field("project_pid"))
                 .where(total_cost.greaterThan(new BigDecimal(totalCostBoundary)))
-                .groupBy(project_name, total_cost, company_name);
+                .groupBy(project_name, total_cost, company_name)
+                .orderBy(company_name);
 
 
         return query.fetchInto(ProjectsWithCostsGreaterThanOutput.class);

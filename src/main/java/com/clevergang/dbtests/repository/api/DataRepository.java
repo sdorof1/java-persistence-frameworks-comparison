@@ -34,13 +34,25 @@ public interface DataRepository {
 
     // projects
 
+    /**
+     * Insert project and return PID of newly created item
+     * @param project Project to be inserted
+     * @return PID of new record in database
+     */
     Integer insertProject(Project project);
 
+    /**
+     * Insert projects and return all PIDs of newly created records.
+     * @param projects New projects to insert
+     * @return List of PIDs of newly created records.
+     */
     List<Integer> insertProjects(List<Project> projects);
 
     List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsGreaterThan(int totalCostBoundary);
 
     // employees
+
+    Employee findEmployee(Integer pid);
 
     List<Employee> employeesWithSalaryGreaterThan(Integer minSalary);
 
@@ -48,4 +60,6 @@ public interface DataRepository {
 
     RegisterEmployeeOutput callRegisterEmployee(String name, String surname, String email, BigDecimal salary,
                                                 String departmentName, String companyName);
+
+    Integer getProjectsCount();
 }

@@ -1,17 +1,20 @@
 # Java repository layer frameworks comparison
 
-Comparison of usage of non-JPA SQL mapping (persistence) frameworks for Java (Jooq, Spring JDBCTemplate etc.).
+Comparison of usage of non-JPA SQL mapping (persistence) frameworks for Java (Jooq, Spring JDBCTemplate, MyBatis etc.).
 
-We are not comparing performance (that'll be maybe added later), but rather how are these frameworks used for everyday tasks.
+We are not comparing performance, but rather how are these frameworks used for everyday tasks.
 
-We prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA DB layer frameworks.
+We prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA DB layer frameworks. This project should serve
+- as point of reference when deciding for SQL mapping framework 
+- as a template of common framework usage scenarios (see scenarios below)
+- to document best practices of such common usages (**comments are welcomed!**)
 
 ## Frameworks compared
 
 * Spring JDBCTemplate (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jdbctemplate/JDBCDataRepositoryImpl.java))
 * jOOQ (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jooq/JooqDataRepositoryImpl.java))
 
-We tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments explaining why we chose to such implementation and some FIXMEs on places which we do not like, but which cannot be implemented differently or which we do not know how to improve...
+We tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments explaining why we chose to such implementation and some FIXMEs on places which we do not like, but which cannot be implemented differently or which we have troubles to improve...
 
 ## Scenarios implemented
 
@@ -49,11 +52,6 @@ Well, we were trying to "stick with standard" in our projects so we used JPA in 
 
 So we dropped JPA completely, started using JDBCTemplate and discovered that we can deliver apps sooner (which was kind of surprising), they are a lot faster (thanks to effective use of DB) and much more robust... This was really relaxing and we do not plan to return to JPA at all... (yes, even for CRUD applications!) 
 
-This project aims to explore other options in the SQL mapping area than just JDBCTemplate. It should serve us
- 
-- as point of reference when deciding for SQL mapping framework 
-- as a template of common DB usage scenarios
-- to document best practices of such common usages (**comments are welcomed!**)
-
+This project aims to explore other options in the SQL mapping area than just JDBCTemplate. 
 
 **Use code in the repository as you like (MIT License)**

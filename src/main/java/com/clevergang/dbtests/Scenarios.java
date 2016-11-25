@@ -6,11 +6,13 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StopWatch;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -43,6 +45,10 @@ public class Scenarios {
     public void fetchSingleEntityScenario(Integer companyPid) {
         Company company = repository.findCompany(companyPid);
 
+        // check some post conditions
+        assert company != null;
+        assert company.getPid().equals(companyPid);
+        assert company.getName().equals("CleverGang");
         logger.info("Fetched result: {}", company);
     }
 
@@ -55,6 +61,9 @@ public class Scenarios {
     public void fetchListOfEntitiesScenario(Integer employeeMinSalary) {
         List<Employee> employees = repository.employeesWithSalaryGreaterThan(employeeMinSalary);
 
+        // check some post conditions
+        assert employees != null;
+        assert employees.size() == 3;
         logger.info("Fetched result: {}", employees);
     }
 
@@ -66,8 +75,14 @@ public class Scenarios {
         project.setName("TestProject");
         project.setDate(LocalDate.now());
 
-        repository.insertProject(project);
-    }
+        // SCENARIO CODE STARTS HERE
+        Integer newPid = repository.insertProject(project);
+
+        // check some post conditions
+        assert newPid != null;
+        assert newPid > 2;
+        logger.info("Scenario three, pid of inserted entity: {}", newPid);
+   }
 
     /**
      * 4. Batch insert multiple entities of same type and return generated keys
@@ -81,17 +96,20 @@ public class Scenarios {
     public void batchInsertMultipleEntitiesScenario() {
         // create a list of thousand products
         List<Project> projects = new ArrayList<>();
-        StopWatch watch = new StopWatch();
-        watch.start();
         for (int i = 0; i < 1000; i++) {
             Project project = new Project();
             project.setName(RandomStringUtils.randomAlphabetic(10));
             project.setDate(LocalDate.now());
             projects.add(project);
         }
-        repository.insertProjects(projects);
-        watch.stop();
-        logger.info("Total time {} ms", watch.getTotalTimeMillis());
+
+        // SCENARIO CODE STARTS HERE
+        List<Integer> newPids = repository.insertProjects(projects);
+
+        // check some postconditions
+        Integer projectsCount = repository.getProjectsCount();
+        assert projectsCount == 1002;
+        logger.info("Scenario 4. output {}", newPids);
     }
 
     /**
@@ -103,22 +121,29 @@ public class Scenarios {
      */
     public void updateCompleteEntityScenario() {
         // Imagine that this object comes from UI edit dialog, which is typical scenario
-        Employee employeeToUpdate = performSomeEmployeeRecordUpdateInUI();
+        Employee employeeToUpdate = performSomeEmployeeRecordModificationsInUI(1);
 
-        // SCENARIO CODE STARTS HERE - update the employee in DB
-
+        // SCENARIO CODE STARTS HERE
         repository.updateEmployee(employeeToUpdate);
 
+        // check some post conditions
+        Employee updatedEmployee = repository.findEmployee(1);
+        assert employeeToUpdate.getPid().equals(updatedEmployee.getPid());
+        assert employeeToUpdate.getDepartmentPid().equals(updatedEmployee.getDepartmentPid());
+        assert employeeToUpdate.getName().equals(updatedEmployee.getName());
+        assert employeeToUpdate.getSurname().equals(updatedEmployee.getSurname());
+        assert employeeToUpdate.getEmail().equals(updatedEmployee.getEmail());
+        assert employeeToUpdate.getSalary().equals(updatedEmployee.getSalary());
     }
 
-    private Employee performSomeEmployeeRecordUpdateInUI() {
+    private Employee performSomeEmployeeRecordModificationsInUI(Integer employeePid) {
         Employee employeeToUpdate = new Employee();
-        employeeToUpdate.setPid(1);
-        employeeToUpdate.setDepartmentPid(1);
-        employeeToUpdate.setName("Curt");
-        employeeToUpdate.setSurname("Odegaard");
-        employeeToUpdate.setEmail("curt.odegaard@updated.com");  // <-- this is updated value
-        employeeToUpdate.setSalary(new BigDecimal("15000")); // <-- this is updated value
+        employeeToUpdate.setPid(employeePid);
+        employeeToUpdate.setDepartmentPid(6);
+        employeeToUpdate.setName("Curt1");
+        employeeToUpdate.setSurname("Odegaard1");
+        employeeToUpdate.setEmail("curt.odegaard@updated.com1");  // <-- this is updated value
+        employeeToUpdate.setSalary(new BigDecimal("15000.00")); // <-- this is updated value
         return employeeToUpdate;
     }
 
@@ -128,6 +153,7 @@ public class Scenarios {
     public void fetchManyToOneRelationScenario() {
         Department softwareDevelopmentDepartment = repository.findDepartment(3);
 
+        // SCENARIO CODE STARTS HERE
         // Getting Company for Department (many-to-one relation) in JPA is quite easy. You typically have
         // @ManyToOne relation defined in the Department entity class, so once you have instance of Department,
         // you just call department.getCompany() and JPA does the magic for you (typically one or more lazy selects
@@ -135,6 +161,9 @@ public class Scenarios {
         // too: we have company_pid, so just ask DataRepository for the record:
         Company company = repository.findCompany(softwareDevelopmentDepartment.getCompanyPid());
 
+        // check some post conditions
+        assert company.getName().equals("CleverGang");
+        assert company.getPid().equals(1);
         logger.info("Department {} is in the {} company", softwareDevelopmentDepartment.getName(), company.getName());
     }
 
@@ -144,6 +173,7 @@ public class Scenarios {
     public void fetchOneToManyRelationScenario() {
         Company company = repository.findCompany(1);
 
+        // SCENARIO CODE STARTS HERE
         // For one-to-many relations the situation is quite similar to many-to-one relations (scenario six). In JPA this
         // is "easy" - you define @OneToMany relation in the Company entity and then you just call getDepartments() method ->
         // a lazy select is issued and Departments are fetched from DB. However you can also use EAGER FetchType strategy which
@@ -151,6 +181,8 @@ public class Scenarios {
         // in JPA... So, in non-JPA approach, we don't have any "eager" loads, just explicit calls for data:
         List<Department> departments = repository.findDepartmentsOfCompany(company);
 
+        // check some post conditions
+        assert departments.size() == 4;
         logger.info("There are {} departments in {} company", departments.size(), company.getName());
     }
 
@@ -176,11 +208,16 @@ public class Scenarios {
 
 
         // SCENARIO CODE STARTS HERE - update departments in DB
-
         updateDepartments(company, newDepartments);
 
-        // now check the results
+        // check some post conditions
         List<Department> departmentsForCompany = repository.findDepartmentsOfCompany(company);
+        assert departmentsForCompany.size() == 5;
+        assert departmentsForCompany.get(0).getName().equals("Back office");
+        assert departmentsForCompany.get(1).getName().equals("IT Department Updated");
+        assert departmentsForCompany.get(2).getName().equals("Software Development");
+        assert departmentsForCompany.get(3).getName().equals("New department 1");
+        assert departmentsForCompany.get(4).getName().equals("New department 2");
         logger.info("State of database at the end of scenario eight: {}", departmentsForCompany);
     }
 
@@ -191,6 +228,7 @@ public class Scenarios {
 
         // first get current departments
         List<Department> currentDepartments = repository.findDepartmentsOfCompany(company);
+        logger.info("Company {} current departments {}", company.getName(), currentDepartments);
 
         // now determine which departments were deleted
         Collection<Integer> newPIDs = CollectionUtils.collect(newDepartments, Department::getPid);
@@ -222,13 +260,10 @@ public class Scenarios {
         departments.add(new Department(company.getPid(), "New department 2"));
 
         // update one item
-        Optional<Department> itDepartment = departments.stream()
+        departments.stream()
                 .filter(it -> it.getName().equals("IT Department"))
-                .findFirst();
-
-        if (itDepartment.isPresent()) {
-            itDepartment.get().setName("IT Department Updated");
-        }
+                .findFirst()
+                .ifPresent(it -> it.setName("IT Department Updated"));
 
         return departments;
     }
@@ -244,6 +279,13 @@ public class Scenarios {
     public void executeComplexSelectScenario() {
         List<ProjectsWithCostsGreaterThanOutput> projectsWithCostsGreaterThan = repository.getProjectsWithCostsGreaterThan(70000);
 
+        // check some post conditions
+        assert projectsWithCostsGreaterThan != null;
+        assert projectsWithCostsGreaterThan.size() == 2;
+        assert projectsWithCostsGreaterThan.get(0).getCompanyName().equals("CleverGang");
+        assert projectsWithCostsGreaterThan.get(0).getCompanyCost().equals(new BigDecimal("72000.00"));
+        assert projectsWithCostsGreaterThan.get(1).getCompanyName().equals("Supersoft");
+        assert projectsWithCostsGreaterThan.get(1).getCompanyCost().equals(new BigDecimal("13000.00"));
         logger.info("executeComplexSelectScenario output: {}", projectsWithCostsGreaterThan);
     }
 
@@ -253,6 +295,14 @@ public class Scenarios {
     public void callStoredProcedureScenario() {
         RegisterEmployeeOutput output = repository.callRegisterEmployee("Bretislav", "Wajtr", "bretislav.wajtr@test.com", new BigDecimal(40000), "MyDepartment", "MyCompany");
 
+        // check some post conditions
+        assert output != null;
+        assert output.getEmployeePid() != null;
+        assert output.getEmployeePid() > 10;
+        assert output.getDepartmentPid() != null;
+        assert output.getDepartmentPid() > 7;
+        assert output.getCompanyPid() != null;
+        assert output.getCompanyPid() > 3;
         logger.info("callStoredProcedureScenario output: {}", output);
     }
 
@@ -272,7 +322,10 @@ public class Scenarios {
     public void executeSimpleStaticStatementScenario() {
         Company output = repository.findCompanyUsingSimpleStaticStatement(1);
 
-        logger.info("Output: {}", output);
+        // check some post conditions
+        assert output != null;
+        assert output.getName().equals("CleverGang");
+        logger.info("Output of scenario 11: {}", output);
     }
 }
 

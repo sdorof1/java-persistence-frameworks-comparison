@@ -17,6 +17,7 @@ description = 'Comparison and common patterns for non-JPA SQL mapping frameworks
 
 repositories {
     jcenter()
+    maven { url "https://jitpack.io" }
 }
 
 // We need Java8 for this project
@@ -31,6 +32,9 @@ dependencies {
     compile "org.postgresql:postgresql:9.4.1211.jre7"
     compile "org.apache.commons:commons-lang3:3.4"
     compile "org.apache.commons:commons-collections4:4.1"
+
+    // required so mybatis works with java8 datetime classes (LocalDate)
+    compile 'com.github.javaplugs:mybatis-types:0.3'
 
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
