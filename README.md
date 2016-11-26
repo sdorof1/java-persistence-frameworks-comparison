@@ -1,17 +1,23 @@
 # Java repository layer frameworks comparison
 
-Comparison of usage of non-JPA SQL mapping (persistence) frameworks for Java (Jooq, Spring JDBCTemplate etc.).
+Comparison of usage of non-JPA SQL mapping (persistence) frameworks for Java (Jooq, Spring JDBCTemplate, MyBatis etc.).
 
-We are not comparing performance (that'll be maybe added later), but rather how are these frameworks used for everyday tasks.
+We are not comparing performance, but rather how are these frameworks used for everyday tasks.
 
-We prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA DB layer frameworks.
+We prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA DB layer frameworks. This project should serve
+- as point of reference when deciding for SQL mapping framework 
+- as a template of common framework usage scenarios (see scenarios below)
+- to document best practices of such common usages (**comments are welcomed!**)
+
+**Use code in the repository as you like (MIT License)**
 
 ## Frameworks compared
 
 * Spring JDBCTemplate (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jdbctemplate/JDBCDataRepositoryImpl.java))
 * jOOQ (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jooq/JooqDataRepositoryImpl.java))
+* MyBatis (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/mybatis/MyBatisDataRepositoryImpl.java) and  [mapper](src/main/resources/mybatis/mappers/DataRepositoryMapper.xml))
 
-We tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments explaining why we chose to such implementation and some FIXMEs on places which we do not like, but which cannot be implemented differently or which we do not know how to improve...
+We tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments explaining why we chose to such implementation and some FIXMEs on places which we do not like, but which cannot be implemented differently or which we have troubles to improve...
 
 ## Scenarios implemented
 
@@ -49,11 +55,47 @@ Well, we were trying to "stick with standard" in our projects so we used JPA in 
 
 So we dropped JPA completely, started using JDBCTemplate and discovered that we can deliver apps sooner (which was kind of surprising), they are a lot faster (thanks to effective use of DB) and much more robust... This was really relaxing and we do not plan to return to JPA at all... (yes, even for CRUD applications!) 
 
-This project aims to explore other options in the SQL mapping area than just JDBCTemplate. It should serve us
- 
-- as point of reference when deciding for SQL mapping framework 
-- as a template of common DB usage scenarios
-- to document best practices of such common usages (**comments are welcomed!**)
+This project aims to explore other options in the SQL mapping area than just JDBCTemplate. 
 
+## Conclusions/Notes
 
-**Use code in the repository as you like (MIT License)**
+I was able to implement all of the scenarios with all of the tested frameworks -
+with only difference in how comfortable or inconvenient it was. Please note that following remarks 
+are very subjective and does not have to necessarily apply to you.
+
+#### What would I choose
+  
+1. If project manager is ok with additional cost of a licence or the project uses one of open source databases (like PostgreSQL) then definitely go with **jOOQ**.
+2. If project uses Oracle, DB2, MSSQL or any other commercial database and additional cost for jOOQ licence is not acceptable, then go with **JDBCTemplate** 
+  
+#### Subjective pros/cons of each framework 
+
+**JDBC Template**
+* Pros
+    * Feels like you are very close to JDBC itself
+    * Implemented all of the scenarios without bigger issues - there were no hidden surprises
+    * Very easy batch operations
+    * Easy setup
+* Cons
+    * Methods in JDBCDataRepositoryImpl are not much readable - that's because you have to inline SQL in Java code. It would have been better if Java supported multiline strings.
+    * Debug logging could be better  
+
+**jOOQ**
+* Pros
+  * Very fluent, very easy to write new queries, code is very readable
+  * Once setup it's very easy to use, excellent for simple queries
+  * Awesome logger debug output
+* Cons
+  * Paid licence for certain databases - it'll be difficult to persuade managers that it's worth it :)
+  * Not so much usable for big queries - it's better to use native SQL (see scenario 9.)
+  * Weird syntax for performing batch operations (in case that you do not use UpdatableRecord). But it's not a big deal... 
+  
+
+**MyBatis**
+* Pros
+  * Writing SQL statements in XML mapper file feels good - it's easy to work with parameters.
+* Cons
+  * quite a lot of files for single DAO imlementation (MyBatisDataRepositoryImpl, DataRepositoryMapper and DataRepositoryMapper.xml), though navigation is not such a big deal
+  * at version 3.4.0 unable to work with Java8 DateTime types (LocalDate etc.), support possible through 3rd party library (mybatis-types), see build.gradle and <typeHandlers> configuration in mybatis-config.xml
+  * can't run batch and non-batch operations in single SqlSession, but have to create completely new SqlSession instead (see configuration in DbTestsApplication class). Surprisingly, this does not necessarily mean that the batch and non-batch operations will be executed in different transactions (as we would expect), so at the end this is not a total drawback, but just inconvenience
+  * expected that localCacheScope=STATEMENT is default MyBatis behavior, which is not... I know this is questionable drawback, but it was kind of surprise for me, see mybatis-config.xml

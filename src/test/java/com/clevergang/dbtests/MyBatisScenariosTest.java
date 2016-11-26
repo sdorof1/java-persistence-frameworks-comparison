@@ -1,6 +1,6 @@
 package com.clevergang.dbtests;
 
-import com.clevergang.dbtests.repository.impl.jdbctemplate.JDBCDataRepositoryImpl;
+import com.clevergang.dbtests.repository.impl.mybatis.MyBatisDataRepositoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,25 +8,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+/**
+ * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
+ */
+@RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = DbTestsApplication.class)
 @Transactional
 @Rollback
-public class JdbcTemplateScenariosTest {
+public class MyBatisScenariosTest {
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    private JDBCDataRepositoryImpl jdbcRepository;
+    private MyBatisDataRepositoryImpl myBatisDataRepository;
 
     private Scenarios scenarios;
 
     @Before
     public void setup() {
-        scenarios = new Scenarios(jdbcRepository);
+        scenarios = new Scenarios(myBatisDataRepository);
     }
+
 
     @Test
     public void scenarioOne() {

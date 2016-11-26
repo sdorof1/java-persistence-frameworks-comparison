@@ -18,13 +18,13 @@ CREATE TABLE Company (
 
 CREATE TABLE Department (
   pid SERIAL PRIMARY KEY,
-  company_pid INTEGER NOT NULL REFERENCES Company (pid) ON DELETE CASCADE,
+  company_pid INTEGER NOT NULL REFERENCES Company (pid) ON DELETE NO ACTION,
   name TEXT NOT NULL
 );
 
 CREATE TABLE Employee (
   pid            SERIAL PRIMARY KEY,
-  department_pid INTEGER NOT NULL REFERENCES Department (pid) ON DELETE CASCADE,
+  department_pid INTEGER NOT NULL REFERENCES Department (pid) ON DELETE NO ACTION,
   name           TEXT    NOT NULL,
   surname        TEXT    NOT NULL,
   email          TEXT,
@@ -40,8 +40,8 @@ CREATE TABLE Project (
 );
 
 CREATE TABLE ProjectEmployee (
-  project_pid INTEGER REFERENCES Project,
-  employee_pid INTEGER REFERENCES Employee,
+  project_pid INTEGER REFERENCES Project ON DELETE NO ACTION,
+  employee_pid INTEGER REFERENCES Employee ON DELETE NO ACTION,
   PRIMARY KEY (project_pid, employee_pid)
 );
 

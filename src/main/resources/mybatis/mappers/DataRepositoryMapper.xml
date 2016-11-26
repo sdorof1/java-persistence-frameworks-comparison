@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clevergang.dbtests.repository.impl.mybatis.DataRepositoryMapper">
+
+    <select id="findCompany" resultType="com.clevergang.dbtests.repository.api.data.Company">
+        SELECT *
+        FROM company
+        WHERE pid = #{pid}
+    </select>
+
+    <select id="findCompanyStatic" statementType="STATEMENT"
+            resultType="com.clevergang.dbtests.repository.api.data.Company">
+        SELECT *
+        FROM company
+        WHERE pid = ${pid}
+    </select>
+
+    <select id="findDepartment" resultType="com.clevergang.dbtests.repository.api.data.Department">
+        SELECT *
+        FROM department
+        WHERE pid = #{pid}
+    </select>
+
+    <select id="employeesWithSalaryGreaterThan" resultType="com.clevergang.dbtests.repository.api.data.Employee">
+        SELECT *
+        FROM employee
+        WHERE salary > #{minSalary}
+    </select>
+
+    <select id="findDepartmentsOfCompany" resultType="com.clevergang.dbtests.repository.api.data.Department">
+        SELECT *
+        FROM department
+        WHERE company_pid = #{pid}
+        ORDER BY pid;
+    </select>
+
+    <select id="getProjectsWithCostsGreaterThan"
+            resultType="com.clevergang.dbtests.repository.api.data.ProjectsWithCostsGreaterThanOutput">
+        WITH
+                project_info AS (
+                    SELECT
+                        project.pid  project_pid,
+                        project.name project_name,
+                        salary       monthly_cost,
+                        company.name company_name
+                    FROM project
+                        JOIN projectemployee ON project.pid = projectemployee.project_pid
+                        JOIN employee ON projectemployee.employee_pid = employee.pid
+                        LEFT JOIN department ON employee.department_pid = department.pid
+                        LEFT JOIN company ON department.company_pid = company.pid
+            ),
+                project_cost AS (
+                    SELECT
+                        project_pid,
+                        sum(monthly_cost) total_cost
+                    FROM project_info
+                    GROUP BY project_pid
+            )
+        SELECT
+            project_name      AS projectName,
+            total_cost        AS totalCost,
+            company_name      AS companyName,
+            sum(monthly_cost) AS companyCost
+        FROM project_info
+            JOIN project_cost USING (project_pid)
+        WHERE total_cost > #{totalCostBoundary}
+        GROUP BY project_name, total_cost, company_name
+        ORDER BY company_name
+    </select>
+
+    <insert id="insertProject" useGeneratedKeys="true" keyColumn="pid" keyProperty="pid">
+        INSERT INTO project (name, datestarted)
+        VALUES (#{name}, #{date})
+        RETURNING pid;
+    </insert>
+
+    <update id="updateEmployee">
+        UPDATE employee
+        SET department_pid = #{departmentPid},
+            name           = #{name},
+            surname        = #{surname},
+            email          = #{email},
+            salary         = #{salary}
+        WHERE pid = #{pid};
+    </update>
+
+    <delete id="deleteDepartments">
+        Delete from department
+        where pid in (
+        <foreach item="item" collection="departmentsToDelete" separator=",">
+            #{item.pid}
+        </foreach>
+        )
+    </delete>
+
+    <insert id="insertDepartment">
+        INSERT INTO department (company_pid, name)
+        VALUES (#{companyPid}, #{name})
+        RETURNING pid
+    </insert>
+
+    <update id="updateDepartment">
+        UPDATE department
+        SET
+            company_pid = #{companyPid},
+            name        = #{name}
+        WHERE pid = #{pid}
+    </update>
+
+    <select id="callRegisterEmployee" resultType="com.clevergang.dbtests.repository.api.data.RegisterEmployeeOutput">
+        SELECT
+            employee_id   AS employeePid,
+            department_id AS departmentPid,
+            company_id    AS companyPid
+        FROM register_employee(#{name}, #{surname}, #{email}, #{salary}, #{departmentName}, #{companyName})
+    </select>
+
+    <select id="getProjectsCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM project
+    </select>
+
+    <select id="findEmployee" resultType="com.clevergang.dbtests.repository.api.data.Employee">
+        SELECT *
+        FROM employee
+        WHERE pid = #{pid}
+    </select>
+
+</mapper>

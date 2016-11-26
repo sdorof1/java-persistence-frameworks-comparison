@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -131,7 +132,7 @@ public class JDBCDataRepositoryImpl implements DataRepository {
 
         jdbcTemplate.update(insertStatement, params, generatedKey);
 
-        return (Integer) generatedKey.getKeys().get("pid");
+        return (Integer)generatedKey.getKeys().get("pid");
     }
 
     @Override
@@ -198,7 +199,8 @@ public class JDBCDataRepositoryImpl implements DataRepository {
                 "SELECT project_name, total_cost, company_name, sum(monthly_cost) company_cost FROM project_info\n" +
                 "  JOIN project_cost USING (project_pid)\n" +
                 "WHERE total_cost > :totalCostBoundary\n" +
-                "GROUP BY project_name, total_cost, company_name";
+                "GROUP BY project_name, total_cost, company_name\n" +
+                "ORDER BY company_name";
 
         Map<String, Object> params = new HashMap<>();
         params.put("totalCostBoundary", totalCostBoundary);
@@ -213,6 +215,18 @@ public class JDBCDataRepositoryImpl implements DataRepository {
         };
 
         return jdbcTemplate.query(query, params, mapper);
+    }
+
+    @Override
+    public Employee findEmployee(Integer pid) {
+        String query;
+        query = "SELECT pid, email, name, salary, surname, department_pid as departmentPid FROM employee WHERE pid = :pid";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("pid", pid);
+
+        // using BeanPropertyRowMapper is easier, but with much worse performance than custom RowMapper
+        return jdbcTemplate.queryForObject(query, params, new BeanPropertyRowMapper<>(Employee.class));
     }
 
     @Override
@@ -245,6 +259,12 @@ public class JDBCDataRepositoryImpl implements DataRepository {
         };
 
         return jdbcTemplate.queryForObject(query, params, mapper);
+    }
+
+    @Override
+    public Integer getProjectsCount() {
+        String query = "SELECT count(*) from project";
+        return jdbcTemplate.queryForObject(query, (SqlParameterSource) null, Integer.class);
     }
 
     @Override
