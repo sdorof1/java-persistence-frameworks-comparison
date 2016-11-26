@@ -211,7 +211,7 @@ public class JooqDataRepositoryImpl implements DataRepository {
 
     private List<ProjectsWithCostsGreaterThanOutput> getProjectsWithCostsUsingNativeQuery(int totalCostBoundary) {
         // FIXME: We should cache loaded scripts in real production code!
-        String query = loadSQLScript("queries/getProjectsWithCostsUsingNativeQuery.sql");
+        String query = loadSQLScript("jooq/queries/getProjectsWithCostsUsingNativeQuery.sql");
 
         return create
                 .resultQuery(query, totalCostBoundary)
