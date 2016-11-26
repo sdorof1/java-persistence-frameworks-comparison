@@ -42,4 +42,6 @@ public interface DataRepositoryMapper {
     Integer getProjectsCount();
 
     Employee findEmployee(Integer pid);
+
+    Project findProject(Integer pid);
 }

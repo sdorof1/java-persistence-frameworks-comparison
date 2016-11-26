@@ -9,16 +9,12 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -38,14 +34,16 @@ public class JDBCDataRepositoryImpl implements DataRepository {
     public Company findCompany(Integer pid) {
         logger.info("Finding Company by ID using JDBCTemplate");
 
-        String query;
-        query = "SELECT pid, address, name " +
+        String query = "SELECT pid, address, name " +
                 "FROM company " +
                 "WHERE pid = :pid";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("pid", pid);
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("pid", pid);
 
+        /*
+         * Note that you can use BeanPropertyRowMapper instead (see findDepartment())
+         */
         RowMapper<Company> mapper = (rs, rowNum) -> {
             Company row = new Company();
             row.setPid(rs.getInt("pid"));
@@ -90,16 +88,15 @@ public class JDBCDataRepositoryImpl implements DataRepository {
 
     @Override
     public Department findDepartment(Integer pid) {
-        String query;
-        query = "SELECT pid, company_pid, name" +
+        String query = "SELECT pid, company_pid, name" +
                 "           FROM department " +
                 "           WHERE pid = :pid";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("pid", pid);
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("pid", pid);
 
         // using BeanPropertyRowMapper is easier, but with much worse performance than custom RowMapper
-        return jdbcTemplate.queryForObject(query, params, new BeanPropertyRowMapper<>(Department.class));
+        return jdbcTemplate.queryForObject(query, params, BeanPropertyRowMapper.newInstance(Department.class));
     }
 
     @Override
@@ -110,11 +107,11 @@ public class JDBCDataRepositoryImpl implements DataRepository {
                 "           FROM employee" +
                 "           WHERE salary > :salary";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("salary", minSalary);
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("salary", minSalary);
 
         // using BeanPropertyRowMapper is easier, but with much worse performance than custom RowMapper
-        return jdbcTemplate.query(query, params, new BeanPropertyRowMapper<>(Employee.class));
+        return jdbcTemplate.query(query, params, BeanPropertyRowMapper.newInstance(Employee.class));
     }
 
     @Override
@@ -124,15 +121,15 @@ public class JDBCDataRepositoryImpl implements DataRepository {
         String insertStatement = " INSERT INTO project (name, datestarted) " +
                 " VALUES (:name, :datestarted)";
 
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("name", project.getName());
-        params.addValue("datestarted", Date.valueOf(project.getDate()));
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("name", project.getName())
+                .addValue("datestarted", project.getDate());
 
         KeyHolder generatedKey = new GeneratedKeyHolder();
 
         jdbcTemplate.update(insertStatement, params, generatedKey);
 
-        return (Integer)generatedKey.getKeys().get("pid");
+        return (Integer) generatedKey.getKeys().get("pid");
     }
 
     @Override
@@ -144,12 +141,9 @@ public class JDBCDataRepositoryImpl implements DataRepository {
 
         MapSqlParameterSource[] paramsList = projects
                 .stream()
-                .map(project -> {
-                    MapSqlParameterSource params = new MapSqlParameterSource();
-                    params.addValue("name", project.getName());
-                    params.addValue("datestarted", Date.valueOf(project.getDate()));
-                    return params;
-                })
+                .map(project -> new MapSqlParameterSource()
+                        .addValue("name", project.getName())
+                        .addValue("datestarted", project.getDate()))
                 .toArray(MapSqlParameterSource[]::new);
 
         jdbcTemplate.batchUpdate(insertStatement, paramsList);
@@ -170,13 +164,13 @@ public class JDBCDataRepositoryImpl implements DataRepository {
                 " salary = :salary" +
                 " WHERE pid = :pid";
 
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("department_pid", employeeToUpdate.getDepartmentPid());
-        params.addValue("name", employeeToUpdate.getName());
-        params.addValue("surname", employeeToUpdate.getSurname());
-        params.addValue("email", employeeToUpdate.getEmail());
-        params.addValue("salary", employeeToUpdate.getSalary());
-        params.addValue("pid", employeeToUpdate.getPid());
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("department_pid", employeeToUpdate.getDepartmentPid())
+                .addValue("name", employeeToUpdate.getName())
+                .addValue("surname", employeeToUpdate.getSurname())
+                .addValue("email", employeeToUpdate.getEmail())
+                .addValue("salary", employeeToUpdate.getSalary())
+                .addValue("pid", employeeToUpdate.getPid());
 
         jdbcTemplate.update(updateStatement, params);
     }
@@ -202,8 +196,8 @@ public class JDBCDataRepositoryImpl implements DataRepository {
                 "GROUP BY project_name, total_cost, company_name\n" +
                 "ORDER BY company_name";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("totalCostBoundary", totalCostBoundary);
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("totalCostBoundary", totalCostBoundary);
 
         RowMapper<ProjectsWithCostsGreaterThanOutput> mapper = (rs, rowNum) -> {
             ProjectsWithCostsGreaterThanOutput row = new ProjectsWithCostsGreaterThanOutput();
@@ -220,13 +214,13 @@ public class JDBCDataRepositoryImpl implements DataRepository {
     @Override
     public Employee findEmployee(Integer pid) {
         String query;
-        query = "SELECT pid, email, name, salary, surname, department_pid as departmentPid FROM employee WHERE pid = :pid";
+        query = "SELECT pid, email, name, salary, surname, department_pid AS departmentPid FROM employee WHERE pid = :pid";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("pid", pid);
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("pid", pid);
 
         // using BeanPropertyRowMapper is easier, but with much worse performance than custom RowMapper
-        return jdbcTemplate.queryForObject(query, params, new BeanPropertyRowMapper<>(Employee.class));
+        return jdbcTemplate.queryForObject(query, params, BeanPropertyRowMapper.newInstance(Employee.class));
     }
 
     @Override
@@ -242,13 +236,14 @@ public class JDBCDataRepositoryImpl implements DataRepository {
                 "  _company_name := :companyName\n" +
                 ")";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", name);
-        params.put("surname", surname);
-        params.put("email", email);
-        params.put("salary", salary);
-        params.put("departmentName", departmentName);
-        params.put("companyName", companyName);
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("name", name)
+                .addValue("surname", surname)
+                .addValue("email", email)
+                .addValue("salary", salary)
+                .addValue("departmentName", departmentName)
+                .addValue("companyName", companyName);
 
         RowMapper<RegisterEmployeeOutput> mapper = (rs, rowNum) -> {
             RegisterEmployeeOutput row = new RegisterEmployeeOutput();
@@ -263,8 +258,8 @@ public class JDBCDataRepositoryImpl implements DataRepository {
 
     @Override
     public Integer getProjectsCount() {
-        String query = "SELECT count(*) from project";
-        return jdbcTemplate.queryForObject(query, (SqlParameterSource) null, Integer.class);
+        String query = "SELECT count(*) FROM project";
+        return jdbcTemplate.getJdbcOperations().queryForObject(query, Integer.class);
     }
 
     @Override
@@ -274,10 +269,10 @@ public class JDBCDataRepositoryImpl implements DataRepository {
                 "           WHERE company_pid = :pid" +
                 "           ORDER BY pid";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("pid", company.getPid());
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("pid", company.getPid());
 
-        return jdbcTemplate.query(query, params, new BeanPropertyRowMapper<>(Department.class));
+        return jdbcTemplate.query(query, params, BeanPropertyRowMapper.newInstance(Department.class));
     }
 
     @Override
@@ -286,10 +281,10 @@ public class JDBCDataRepositoryImpl implements DataRepository {
                 .map(Department::getPid)
                 .collect(Collectors.toList());
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("pids", ids);
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("pids", ids);
 
-        String updateStatement = "DELETE FROM department where pid IN (:pids)";
+        String updateStatement = "DELETE FROM department WHERE pid IN (:pids)";
 
         jdbcTemplate.update(updateStatement, params);
     }
@@ -314,16 +309,28 @@ public class JDBCDataRepositoryImpl implements DataRepository {
         batchUpdateDepartments(departmentsToInsert, insertStatement);
     }
 
+    @Override
+    public Project findProject(Integer pid) {
+        String query;
+        query = "SELECT pid, name, datestarted AS date" +
+                "           FROM project " +
+                "           WHERE pid = :pid";
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("pid", pid);
+
+        // using BeanPropertyRowMapper is easier, but with much worse performance than custom RowMapper
+        return jdbcTemplate.queryForObject(query, params, BeanPropertyRowMapper.newInstance(Project.class));
+    }
+
     private void batchUpdateDepartments(List<Department> departmentsToInsert, String statement) {
         MapSqlParameterSource[] paramsList = departmentsToInsert
                 .stream()
-                .map(department -> {
-                    MapSqlParameterSource params = new MapSqlParameterSource();
-                    params.addValue("pid", department.getPid());
-                    params.addValue("company_pid", department.getCompanyPid());
-                    params.addValue("name", department.getName());
-                    return params;
-                })
+                .map(department -> new MapSqlParameterSource()
+                        .addValue("pid", department.getPid())
+                        .addValue("company_pid", department.getCompanyPid())
+                        .addValue("name", department.getName())
+                )
                 .toArray(MapSqlParameterSource[]::new);
 
         jdbcTemplate.batchUpdate(statement, paramsList);

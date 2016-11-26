@@ -77,6 +77,12 @@ public interface DataRepository {
     // Projects
 
     /**
+     * @param pid Primary key of the project record to be found
+     * @return Should return full record of the Project record identified by pid
+     */
+    Project findProject(Integer pid);
+
+    /**
      * Insert project and return PID of newly created item
      *
      * @param project Project to be inserted

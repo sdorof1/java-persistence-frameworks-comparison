@@ -128,4 +128,11 @@
         WHERE pid = #{pid}
     </select>
 
+    <select id="findProject" resultType="com.clevergang.dbtests.repository.api.data.Project">
+        SELECT pid, name, datestarted as date
+        FROM project
+        WHERE pid = #{pid}
+    </select>
+
+
 </mapper>

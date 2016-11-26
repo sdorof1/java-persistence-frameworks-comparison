@@ -29,7 +29,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-jdbc"
     compile "org.springframework.boot:spring-boot-starter-jooq"
     compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1'
-    compile "org.postgresql:postgresql:9.4.1211.jre7"
+    compile "org.postgresql:postgresql:9.4.1212"
     compile "org.apache.commons:commons-lang3:3.4"
     compile "org.apache.commons:commons-collections4:4.1"
 

@@ -329,5 +329,18 @@ public class JooqDataRepositoryImpl implements DataRepository {
         batch.execute();
     }
 
+    @Override
+    public Project findProject(Integer pid) {
+        return create.selectFrom(PROJECT)
+                .where(PROJECT.PID.eq(pid))
+                .fetchOne(project -> {
+                    Project result = new Project();
+                    result.setPid(project.getPid());
+                    result.setName(project.getName());
+                    result.setDate(project.getDatestarted().toLocalDate());
+                    return result;
+                });
+    }
+
 }
 

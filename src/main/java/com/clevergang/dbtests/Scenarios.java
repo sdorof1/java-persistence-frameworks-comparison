@@ -79,9 +79,17 @@ public class Scenarios {
         Integer newPid = repository.insertProject(project);
 
         // check some post conditions
+        logger.info("Scenario three, pid of inserted entity: {}", newPid);
         assert newPid != null;
         assert newPid > 2;
-        logger.info("Scenario three, pid of inserted entity: {}", newPid);
+
+        Project storedProject = repository.findProject(newPid);
+        logger.info("Scenario three, stored project: {}", storedProject);
+
+        assert storedProject != null;
+        assert newPid.equals(storedProject.getPid());
+        assert project.getName().equals(storedProject.getName());
+        assert project.getDate().equals(storedProject.getDate());
    }
 
     /**
@@ -106,7 +114,7 @@ public class Scenarios {
         // SCENARIO CODE STARTS HERE
         List<Integer> newPids = repository.insertProjects(projects);
 
-        // check some postconditions
+        // check some post conditions
         Integer projectsCount = repository.getProjectsCount();
         assert projectsCount == 1002;
         logger.info("Scenario 4. output {}", newPids);

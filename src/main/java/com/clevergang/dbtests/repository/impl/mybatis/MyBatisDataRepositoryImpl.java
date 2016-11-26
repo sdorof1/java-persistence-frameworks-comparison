@@ -80,6 +80,11 @@ public class MyBatisDataRepositoryImpl implements DataRepository {
     }
 
     @Override
+    public Project findProject(Integer pid) {
+        return sql.findProject(pid);
+    }
+
+    @Override
     public Integer insertProject(Project project) {
         sql.insertProject(project);
         return project.getPid();
