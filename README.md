@@ -1,6 +1,6 @@
-# Java repository layer frameworks comparison
+# Java persistence frameworks comparison
 
-Comparison of usage of non-JPA SQL mapping (persistence) frameworks for Java (Jooq, Spring JDBCTemplate, MyBatis etc.).
+Comparison of usage of **non-JPA** SQL mapping (persistence) frameworks for Java (Jooq, Spring JDBCTemplate, MyBatis etc.).
 
 We are not comparing performance, but rather how are these frameworks used for everyday tasks.
 
