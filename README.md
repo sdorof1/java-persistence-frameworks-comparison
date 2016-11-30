@@ -1,10 +1,10 @@
 # Java persistence frameworks comparison
 
-Comparison of usage of **non-JPA** SQL mapping (persistence) frameworks for Java (Jooq, Spring JDBCTemplate, MyBatis etc.).
+Comparison of how **non-JPA** SQL mapping (persistence) frameworks for Java (Jooq, Spring JDBCTemplate, etc.) are used.
 
-We are not comparing performance, but rather how are these frameworks used for everyday tasks.
+I'm not comparing performance, but rather how are these frameworks used for everyday tasks.
 
-We prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA DB layer frameworks. This project should serve
+I prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA DB layer frameworks. This project should serve
 - as point of reference when deciding for SQL mapping framework 
 - as a template of common framework usage scenarios (see scenarios below)
 - to document best practices of such common usages (**comments are welcomed!**)
@@ -13,11 +13,21 @@ We prepared some common scenarios, which you typically need to implement data-ce
 
 ## Frameworks compared
 
-* Spring JDBCTemplate (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jdbctemplate/JDBCDataRepositoryImpl.java))
-* jOOQ (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jooq/JooqDataRepositoryImpl.java))
-* MyBatis (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/mybatis/MyBatisDataRepositoryImpl.java) and  [mapper](src/main/resources/mybatis/mappers/DataRepositoryMapper.xml))
+I have following (subjectively evaluated :)) conditions on frameworks which I choose for consideration: 
+1. The framework should embrace - not hide - SQL language and RDBMS we are using
+2. The framework must be mature enough for "enterprise level" use.
+3. Can utilize JPA annotations, but must not be full JPA implementation (see "Why only non-JPA?" section below)
 
-We tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments explaining why we chose to such implementation and some FIXMEs on places which we do not like, but which cannot be implemented differently or which we have troubles to improve...
+With that conditions in respect, following frameworks were compared: 
+
+* **Spring JDBCTemplate** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jdbctemplate/JDBCDataRepositoryImpl.java))
+* **jOOQ** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jooq/JooqDataRepositoryImpl.java))
+* **MyBatis** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/mybatis/MyBatisDataRepositoryImpl.java) and  [mapper](src/main/resources/mybatis/mappers/DataRepositoryMapper.xml))
+
+I tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments in the code explaining why I chose such implementation and some FIXMEs on places which I do not like, but which cannot be implemented differently or which I have troubles to improve...
+
+Furthermore, I considered (and tried to implement) even following frameworks, but it turned out they do not meet the conditions:
+* [Speedment](https://github.com/speedment/speedment) - hides SQL language too much and tries to replace with stream operations; not all scenarios can be implemented in it; as of 11/30/2016 and version 3.0.1 the documentation on GitHub is very weak  
 
 ## Scenarios implemented
 
@@ -51,7 +61,7 @@ Each scenario has it's implementation in the Scenarios class. See javadoc of [Sc
 
 ## Why only non-JPA?
 
-Well, we were trying to "stick with standard" in our projects so we used JPA in the past, but after many years of JPA usage (Hibernate mostly), we realized it's counterproductive. In most of our projects it caused more problems than it helped to solve - especially in big projects (with lots of tables and relations). There are many reasons of those failures - but the biggest issue is that JPA implementations simply turned into bloatware. Lot of strange magic is happening inside and the complexity is so high, that you need a high-class Hibernate uberexpert in every team so the app actually shows some performance and the code is manageable...
+Well, me and my colleagues were always trying to "stick with standard" in our projects so we used JPA in the past, but after many years of JPA usage (Hibernate mostly), we realized it's counterproductive. In most of our projects it caused more problems than it helped to solve - especially in big projects (with lots of tables and relations). There are many reasons of those failures - but the biggest issue is that JPA implementations simply turned into bloatware. Lot of strange magic is happening inside and the complexity is so high, that you need a high-class Hibernate uberexpert in every team so the app actually shows some performance and the code is manageable...
 
 So we dropped JPA completely, started using JDBCTemplate and discovered that we can deliver apps sooner (which was kind of surprising), they are a lot faster (thanks to effective use of DB) and much more robust... This was really relaxing and we do not plan to return to JPA at all... (yes, even for CRUD applications!) 
 
@@ -59,9 +69,7 @@ This project aims to explore other options in the SQL mapping area than just JDB
 
 ## Conclusions/Notes
 
-I was able to implement all of the scenarios with all of the tested frameworks -
-with only difference in how comfortable or inconvenient it was. Please note that following remarks 
-are very subjective and does not have to necessarily apply to you.
+Please note that following remarks are very subjective and does not have to necessarily apply to you.
 
 #### What would I choose
   
