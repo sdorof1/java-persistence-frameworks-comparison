@@ -28,7 +28,8 @@ With that conditions in respect, following frameworks were compared:
 I tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments in the code explaining why I chose such implementation and some FIXMEs on places which I do not like, but which cannot be implemented differently or which I have troubles to improve...
 
 Furthermore, I considered (and tried to implement) even following frameworks, but it turned out they do not meet the conditions:
-* [Speedment](https://github.com/speedment/speedment) - hides SQL language too much and tries to replace with stream operations; not all scenarios can be implemented in it; as of 11/30/2016 and version 3.0.1 the documentation on GitHub is very weak  
+* [Speedment](https://github.com/speedment/speedment) - hides SQL language too much and tries to replace with stream operations; not all scenarios can be implemented in it; as of 11/30/2016 and version 3.0.1 the documentation on GitHub is very weak
+* [sql2o](http://www.sql2o.org/) - it does not support Spring transaction management at all (tested version 1.6.0-RC3), that's a show stopper - tracking this in [Issue #7](https://github.com/bwajtr/java-persistence-frameworks-comparison/issues/7) 
 
 ## Scenarios implemented
 
