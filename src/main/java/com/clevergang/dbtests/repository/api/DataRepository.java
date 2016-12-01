@@ -10,7 +10,7 @@ import java.util.List;
  * we want to work with (CompanyRepository, DepartmentRepository etc.). We decided
  * to create just a single interface in this project, so different implementations are more easily compared...
  *
- * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
+ * @author Bretislav Wajtr
  */
 public interface DataRepository {
 

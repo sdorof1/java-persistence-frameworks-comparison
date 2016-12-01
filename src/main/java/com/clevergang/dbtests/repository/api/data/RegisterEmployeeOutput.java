@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Output of DB procedure call in DataRepository#callRegisterEmployee
  *
- * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
+ * @author Bretislav Wajtr
  */
 @SuppressWarnings("unused")
 public class RegisterEmployeeOutput {

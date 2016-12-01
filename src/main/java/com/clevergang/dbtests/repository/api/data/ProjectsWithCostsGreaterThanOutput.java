@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * This data class represents output of of complex query executed in DataRepository#getProjectsWithCostsGreaterThan
  *
- * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
+ * @author Bretislav Wajtr
  */
 @SuppressWarnings("unused")
 public class ProjectsWithCostsGreaterThanOutput {

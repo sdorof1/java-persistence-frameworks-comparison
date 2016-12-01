@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
+ * @author Bretislav Wajtr
  */
 public class Employee {
 

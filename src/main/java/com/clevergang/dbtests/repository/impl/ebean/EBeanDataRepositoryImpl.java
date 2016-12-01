@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * EBean implementation of DataRepository interface...
  *
- * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
+ * @author Bretislav Wajtr
  */
 @Repository
 public class EBeanDataRepositoryImpl implements DataRepository {

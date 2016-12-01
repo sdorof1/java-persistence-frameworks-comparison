@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Spring JDBCTemplate implementation of the DataRepository
  *
- * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
+ * @author Bretislav Wajtr
  */
 @Repository
 public class JDBCDataRepositoryImpl implements DataRepository {

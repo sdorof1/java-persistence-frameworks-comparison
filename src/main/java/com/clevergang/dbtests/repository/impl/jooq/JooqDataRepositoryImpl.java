@@ -35,7 +35,7 @@ import static org.jooq.impl.DSL.*;
 /**
  * jOOQ implementation of the DataRepository
  *
- * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
+ * @author Bretislav Wajtr
  */
 @Repository
 public class JooqDataRepositoryImpl implements DataRepository {

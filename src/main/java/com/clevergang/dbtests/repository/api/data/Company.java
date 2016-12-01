@@ -3,7 +3,7 @@ package com.clevergang.dbtests.repository.api.data;
 import java.util.Objects;
 
 /**
- * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
+ * @author Bretislav Wajtr
  */
 @SuppressWarnings("unused")
 public class Company {

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * MyBatis Mapper interface for queries in DataRepositoryMapper.xml
  *
- * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
+ * @author Bretislav Wajtr
  */
 @Mapper
 public interface DataRepositoryMapper {

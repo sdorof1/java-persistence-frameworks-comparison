@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
+ * @author Bretislav Wajtr
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest

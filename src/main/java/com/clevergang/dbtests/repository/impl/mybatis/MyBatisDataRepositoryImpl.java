@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * In our case it's necessary anyway because at the end of batch operations (like methods updateDepartments and insertDepartments) we
  * expect that the records are already inserted/updated -> you have to call flushStatements() in MyBatis to achieve that.
  *
- * @author Bretislav Wajtr <bretislav.wajtr@ibacz.eu>
+ * @author Bretislav Wajtr
  */
 @Repository
 public class MyBatisDataRepositoryImpl implements DataRepository {

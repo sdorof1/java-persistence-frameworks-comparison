@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toList;
  * DB API implementation, but we pass it to the constructor of the Scenarios class instead - this
  * isn't typical pattern we use in production code.
  *
- * @author Bretislav Wajtr <bretislav.wajtr@clevergang.com>
+ * @author Bretislav Wajtr
  */
 @SuppressWarnings("WeakerAccess")
 public class Scenarios {
