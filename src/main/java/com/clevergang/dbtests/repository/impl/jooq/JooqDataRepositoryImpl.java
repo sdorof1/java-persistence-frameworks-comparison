@@ -41,13 +41,15 @@ import static org.jooq.impl.DSL.*;
 public class JooqDataRepositoryImpl implements DataRepository {
     private static final Logger logger = LoggerFactory.getLogger(JooqDataRepositoryImpl.class);
 
+    private final DSLContext create;
+    private final Settings staticStatementSettings;
+
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    private DSLContext create;
-
-    @Autowired
-    @Qualifier("static-statement-jooq-settings")
-    private Settings staticStatementSettings;
+    public JooqDataRepositoryImpl(DSLContext create, @Qualifier("static-statement-jooq-settings") Settings staticStatementSettings) {
+        this.create = create;
+        this.staticStatementSettings = staticStatementSettings;
+    }
 
     @Override
     public Company findCompany(Integer pid) {
@@ -110,15 +112,13 @@ public class JooqDataRepositoryImpl implements DataRepository {
     public Integer insertProject(Project project) {
         logger.info("Inserting project using JOOQ");
 
-        Integer pid = create
+        return create
                 .insertInto(PROJECT)
                 .set(PROJECT.NAME, project.getName())
                 .set(PROJECT.DATESTARTED, Date.valueOf(project.getDate()))
                 .returning(PROJECT.PID)
                 .fetchOne()
                 .getPid();
-
-        return pid;
     }
 
     @Override

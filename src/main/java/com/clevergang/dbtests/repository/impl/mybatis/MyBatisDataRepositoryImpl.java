@@ -26,13 +26,15 @@ import java.util.stream.Collectors;
 @Repository
 public class MyBatisDataRepositoryImpl implements DataRepository {
 
+    private final DataRepositoryMapper sql;
+    private final SqlSession batchOperations;
+
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    private DataRepositoryMapper sql;
-
-    @Autowired
-    @Qualifier("batch-operations")
-    private SqlSession batchOperations;
+    public MyBatisDataRepositoryImpl(DataRepositoryMapper sql, @Qualifier("batch-operations") SqlSession batchOperations) {
+        this.sql = sql;
+        this.batchOperations = batchOperations;
+    }
 
     @Override
     public Company findCompany(Integer pid) {
@@ -97,7 +99,7 @@ public class MyBatisDataRepositoryImpl implements DataRepository {
         // we have to flush statements here - the records would be inserted only at the end of the transaction otherwise
         batchOperations.flushStatements();
 
-        // MyBatis is the only framework which can actually return the PIDs from batch operation ;)
+        // MyBatis can actually return the PIDs from batch operation
         return projects.stream().map(Project::getPid).collect(Collectors.toList());
     }
 

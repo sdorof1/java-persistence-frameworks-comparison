@@ -1,5 +1,9 @@
 package com.clevergang.dbtests;
 
+import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.EbeanServerFactory;
+import com.avaje.ebean.config.ServerConfig;
+import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -25,9 +29,9 @@ import javax.sql.DataSource;
 @Configuration
 public class DbTestsApplication {
 
-    /**
+    /*
      * JOOQ CONFIGURATIONS
-     **/
+     */
 
     @Bean
     @Primary
@@ -47,9 +51,9 @@ public class DbTestsApplication {
         return ret;
     }
 
-    /**
+    /*
      * MYBATIS CONFIGURATIONS
-     **/
+     */
 
     @Bean
     @Primary
@@ -76,6 +80,30 @@ public class DbTestsApplication {
         sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis/mybatis-config.xml"));
 
         return new SqlSessionTemplate(sqlSessionFactoryBean.getObject(), ExecutorType.BATCH);
+    }
+
+    /*
+     * EBEAN CONFIGURATIONS
+     */
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Bean
+    public ServerConfig ebeanServerConfig(DataSource dataSource) {
+        ServerConfig config = new ServerConfig();
+        config.setName("ebeanServer");
+        config.setDefaultServer(true);
+        config.setDataSource(dataSource);
+        config.addPackage("com.clevergang.dbtests.repository.impl.ebean.entities");
+        config.setExternalTransactionManager(new SpringAwareJdbcTransactionManager());
+        config.setAutoCommitMode(false);
+        config.setExpressionNativeIlike(true);
+
+        return config;
+    }
+
+    @Bean
+    public EbeanServer ebeanServer(ServerConfig serverConfig) {
+        return EbeanServerFactory.create(serverConfig);
     }
 
     public static void main(String[] args) {

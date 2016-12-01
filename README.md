@@ -4,7 +4,7 @@ Comparison of how **non-JPA** SQL mapping (persistence) frameworks for Java (Joo
 
 I'm not comparing performance, but rather how are these frameworks used for everyday tasks.
 
-I prepared some common scenarios, which you typically need to implement data-centric application, and then we implemented these scenarios using various non-JPA DB layer frameworks. This project should serve
+I prepared some common scenarios, which you typically need to implement data-centric application, and then I implemented these scenarios using various non-JPA DB layer frameworks. This project should serve
 - as point of reference when deciding for SQL mapping framework 
 - as a template of common framework usage scenarios (see scenarios below)
 - to document best practices of such common usages (**comments are welcomed!**)
@@ -23,6 +23,7 @@ With that conditions in respect, following frameworks were compared:
 * **Spring JDBCTemplate** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jdbctemplate/JDBCDataRepositoryImpl.java))
 * **jOOQ** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jooq/JooqDataRepositoryImpl.java))
 * **MyBatis** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/mybatis/MyBatisDataRepositoryImpl.java) and  [mapper](src/main/resources/mybatis/mappers/DataRepositoryMapper.xml))
+* **EBean** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/ebean/EBeanDataRepositoryImpl.java)) 
 
 I tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments in the code explaining why I chose such implementation and some FIXMEs on places which I do not like, but which cannot be implemented differently or which I have troubles to improve...
 
@@ -57,7 +58,8 @@ Each scenario has it's implementation in the Scenarios class. See javadoc of [Sc
 2. Configure PostgreSQL connection details in [application.properties](src/main/resources/application.properties)
 3. Create tables and data by running [create-script.sql](sql-updates/create-script.sql)
 4. Create one stored procedure by running [register_employee.sql](sql-updates/sql_functions/register_employee.sql)
-5. Give the scenarios a test run by running one of the test classes and enjoy :)
+5. Tests will passing when executed from gradle build. If you want tests to be passing even from your IDE, then [setup EBean enhancer for your IDE](http://ebean-orm.github.io/docs/setup/enhancement) 
+6. Give the scenarios a test run by running one of the test classes and enjoy :)
 
 ## Why only non-JPA?
 
@@ -98,7 +100,6 @@ Please note that following remarks are very subjective and does not have to nece
   * Not so much usable for big queries - it's better to use native SQL (see scenario 9.)
   * Weird syntax for performing batch operations (in case that you do not use UpdatableRecord). But it's not a big deal... 
   
-
 **MyBatis**
 * Pros
   * Writing SQL statements in XML mapper file feels good - it's easy to work with parameters.
@@ -107,3 +108,16 @@ Please note that following remarks are very subjective and does not have to nece
   * at version 3.4.0 unable to work with Java8 DateTime types (LocalDate etc.), support possible through 3rd party library (mybatis-types), see build.gradle and <typeHandlers> configuration in mybatis-config.xml
   * can't run batch and non-batch operations in single SqlSession, but have to create completely new SqlSession instead (see configuration in DbTestsApplication class). Surprisingly, this does not necessarily mean that the batch and non-batch operations will be executed in different transactions (as we would expect), so at the end this is not a total drawback, but just inconvenience
   * expected that localCacheScope=STATEMENT is default MyBatis behavior, which is not... I know this is questionable drawback, but it was kind of surprise for me, see mybatis-config.xml
+  
+**EBean**
+* Pros
+  * Everything looks very nice - all the scenarios are implemented by very readable code
+  * Super simple batch operations (actually it's only about using right method :) ) 
+  * Although there are methods which make CRUD operations and Querying super simple, there are still means how to execute plain SQL and even a way how to get the basic JDBC Transaction object, which you can use for core JDBC stuff. That is really good.  
+* Cons
+  * Necessity to write the entities (I mean @Entity classes) - it would be cool to have some generator for it
+  * Necessity of "enhancement" of the entities - this was quite surprising for me - but actually it's basically only about right environment setup (IDE plugin and Gradle plugin) and then you don't have to think about it 
+  * Online documentation is quite weak (as of December 1, 2016). Lot of things are hidden in videos and you have to google for details or get into JavaDocs... Hoverwer, JavaDoc is very good and I generally didn't a problem to find what I need in JavaDoc. Also the API is quite understandable... at the end weak online documentation is not such a big deal.
+  * Logging could be better
+  * Allows JPA OneToMany and ManyToOne relations modeling and possibility to "lazy fetch" these relations - actually I do not like this concept at all as it can lead to potentially very ineffective code. Per documentation and experiences of several people on internet EBean behaves better than full blown JPA implementation in this manner, but you can still be hit by the N+1 problem and all the performance traps, which lazy fetching brings... 
+  

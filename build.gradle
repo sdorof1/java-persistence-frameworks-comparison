@@ -1,42 +1,48 @@
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE"  // to include SpringBoot parent BOM
-    }
-}
-
-apply plugin: 'spring-boot'
-apply plugin: 'java'
-
 group = 'com.clevergang'
 version = '1.0.0'
 description = 'Comparison and common patterns for non-JPA SQL mapping frameworks for Java (Jooq, Spring JDBCTemplate etc.)'
 
-repositories {
-    jcenter()
-    maven { url "https://jitpack.io" }
-}
+apply plugin: 'spring-boot'
+apply plugin: 'java'
+apply plugin: 'com.github.kt3k.ebean.enhance'  // required so the enhancer works, see below
 
 // We need Java8 for this project
 tasks.withType(JavaCompile) {
     sourceCompatibility = '1.8'
 }
 
+// this is actually required for EBean to work. EBean needs all @Entity classes to be enhanced before usage
+// for gradle builds this is how the entities are enhanced. See more info here:
+//      http://ebean-orm.github.io/docs/setup/enhancement
+// and here:
+//      https://github.com/kt3k/ebean-enhance-plugin
+ebeanEnhance {
+    packages = 'com.clevergang.dbtests.repository.impl.ebean.entities.**'
+    agentVersion = '8.1.1'
+}
+
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-jdbc"
-    compile "org.springframework.boot:spring-boot-starter-jooq"
-    compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1'
-    compile "org.postgresql:postgresql:9.4.1212"
-    compile "org.apache.commons:commons-lang3:3.4"
-    compile "org.apache.commons:commons-collections4:4.1"
+    compile(
+            "org.springframework.boot:spring-boot-starter-jdbc",
+            "org.postgresql:postgresql:9.4.1212",
+            "org.apache.commons:commons-lang3:3.4",
+            "org.apache.commons:commons-collections4:4.1",
 
-    // required so mybatis works with java8 datetime classes (LocalDate)
-    compile 'com.github.javaplugs:mybatis-types:0.3'
+            // jOOQ dependencies
+            "org.springframework.boot:spring-boot-starter-jooq",
 
-    testCompile "org.springframework.boot:spring-boot-starter-test"
+            // EBean dependencies
+            "org.avaje.ebean:ebean:9.2.1",
+            "org.avaje.ebean:ebean-spring:7.2.1",
+
+            // MyBatis dependencies
+            'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1',
+            'com.github.javaplugs:mybatis-types:0.3' // required so mybatis works with java8 datetime classes (LocalDate)
+    )
+
+    testCompile(
+            "org.springframework.boot:spring-boot-starter-test"
+    )
 }
 
 // we want to show following test events in the log
@@ -44,4 +50,22 @@ test {
     testLogging {
         events "PASSED", "FAILED", "SKIPPED"
     }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE"  // to include SpringBoot parent BOM
+        classpath "gradle.plugin.org.kt3k:ebean-enhance-plugin:2.0.5"
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
 }

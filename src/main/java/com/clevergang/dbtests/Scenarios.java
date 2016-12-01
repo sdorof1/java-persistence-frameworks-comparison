@@ -64,6 +64,9 @@ public class Scenarios {
         // check some post conditions
         assert employees != null;
         assert employees.size() == 3;
+        assert employees.get(0).getSalary().compareTo(new BigDecimal(employeeMinSalary)) > 0;
+        assert employees.get(1).getSalary().compareTo(new BigDecimal(employeeMinSalary)) > 0;
+        assert employees.get(2).getSalary().compareTo(new BigDecimal(employeeMinSalary)) > 0;
         logger.info("Fetched result: {}", employees);
     }
 
@@ -112,12 +115,17 @@ public class Scenarios {
         }
 
         // SCENARIO CODE STARTS HERE
+        long start = System.nanoTime();
         List<Integer> newPids = repository.insertProjects(projects);
 
         // check some post conditions
         Integer projectsCount = repository.getProjectsCount();
+        long end = System.nanoTime();
+
         assert projectsCount == 1002;
         logger.info("Scenario 4. output {}", newPids);
+        logger.info("Rough time needed for execution (without commit): {} ms", (end - start) / 1000000d);
+
     }
 
     /**

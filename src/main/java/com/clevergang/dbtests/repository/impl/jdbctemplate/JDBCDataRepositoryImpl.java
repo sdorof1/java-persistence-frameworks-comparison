@@ -26,9 +26,13 @@ import java.util.stream.Collectors;
 public class JDBCDataRepositoryImpl implements DataRepository {
     private static final Logger logger = LoggerFactory.getLogger(JDBCDataRepositoryImpl.class);
 
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    public JDBCDataRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public Company findCompany(Integer pid) {
