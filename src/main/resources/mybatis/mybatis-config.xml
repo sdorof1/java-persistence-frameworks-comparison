@@ -6,7 +6,7 @@
     <settings>
         <!-- Actually default setting localCacheScope=SESSION is quite unexpected behaviour, at least for me ;) -->
         <!-- I would advice to solve caching (even for session scope) by spring annotations - to better control what is cached. -->
-        <!--Setting localCacheScope to STATMENT -> this way it's ensured that every call to MyBatis WILL go to database and fetch new results EVERYTIME -->
+        <!--Setting localCacheScope to STATEMENT -> this way it's ensured that every call to MyBatis WILL go to database and fetch new results EVERYTIME -->
         <setting name="localCacheScope" value="STATEMENT"/>
      </settings>
     <typeHandlers>

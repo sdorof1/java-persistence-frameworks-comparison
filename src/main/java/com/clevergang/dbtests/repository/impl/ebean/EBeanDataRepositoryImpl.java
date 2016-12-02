@@ -175,7 +175,7 @@ public class EBeanDataRepositoryImpl implements DataRepository {
         // following:
         //    ebean.currentTransaction().getBatch() == PersistBatch.NONE
         //    ebean.currentTransaction().getBatchOnCascade() ==  PersistBatch.ALL
-        // so basically when you do sigle insert (ebean.save()) then batching is not used. But when
+        // so basically when you do single insert (ebean.save()) then batching is not used. But when
         // use use ebean.saveAll, then value for BatchOnCascade is used for storing the value and in
         // our case that's PersistBatch.ALL -> batching is used.
         // That means, for default settings:

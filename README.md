@@ -105,7 +105,7 @@ Please note that following remarks are very subjective and does not have to nece
 * Pros
   * Writing SQL statements in XML mapper file feels good - it's easy to work with parameters.
 * Cons
-  * quite a lot of files for single DAO imlementation (MyBatisDataRepositoryImpl, DataRepositoryMapper and DataRepositoryMapper.xml), though navigation is not such a big deal
+  * quite a lot of files for single DAO implementation (MyBatisDataRepositoryImpl, DataRepositoryMapper and DataRepositoryMapper.xml), though navigation is not such a big deal
   * at version 3.4.0 unable to work with Java8 DateTime types (LocalDate etc.), support possible through 3rd party library (mybatis-types), see build.gradle and <typeHandlers> configuration in mybatis-config.xml
   * can't run batch and non-batch operations in single SqlSession, but have to create completely new SqlSession instead (see configuration in DbTestsApplication class). Surprisingly, this does not necessarily mean that the batch and non-batch operations will be executed in different transactions (as we would expect), so at the end this is not a total drawback, but just inconvenience
   * expected that localCacheScope=STATEMENT is default MyBatis behavior, which is not... I know this is questionable drawback, but it was kind of surprise for me, see mybatis-config.xml
@@ -118,7 +118,7 @@ Please note that following remarks are very subjective and does not have to nece
 * Cons
   * Necessity to write the entities (I mean @Entity classes) - it would be cool to have some generator for it
   * Necessity of "enhancement" of the entities - this was quite surprising for me - but actually it's basically only about right environment setup (IDE plugin and Gradle plugin) and then you don't have to think about it 
-  * Online documentation is quite weak (as of December 1, 2016). Lot of things are hidden in videos and you have to google for details or get into JavaDocs... Hoverwer, JavaDoc is very good and I generally didn't a problem to find what I need in JavaDoc. Also the API is quite understandable... at the end weak online documentation is not such a big deal.
+  * Online documentation is quite weak (as of December 1, 2016). Lot of things are hidden in videos and you have to google for details or get into JavaDocs... However, JavaDoc is very good and I generally didn't have a problem to find what I needed in JavaDoc. Also the API is quite understandable... to sum it up, that weak online documentation is not such a big deal.
   * Logging could be better
   * Allows JPA OneToMany and ManyToOne relations modeling and possibility to "lazy fetch" these relations - actually I do not like this concept at all as it can lead to potentially very ineffective code. Per documentation and experiences of several people on internet EBean behaves better than full blown JPA implementation in this manner, but you can still be hit by the N+1 problem and all the performance traps, which lazy fetching brings... 
   

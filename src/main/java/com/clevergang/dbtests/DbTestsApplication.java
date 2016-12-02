@@ -65,7 +65,7 @@ public class DbTestsApplication {
     @Bean
     @Qualifier("batch-operations")
     @SuppressWarnings("SpringJavaAutowiringInspection")
-    public SqlSession myBatisBatchOperationstSession(DataSource dataSource) throws Exception {
+    public SqlSession myBatisBatchOperationsSession(DataSource dataSource) throws Exception {
         /*
             NOTE: Unfortunately, in MyBatis it's not possible to execute batch and non-batch operations in single SqlSession.
             To support this scenario, we have to create completely new SqlSessionFactoryBean and completely new
