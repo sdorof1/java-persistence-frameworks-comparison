@@ -41,7 +41,7 @@ public interface DataRepository {
     /**
      * Should return full records of all Departments assigned to the Company (passed in as parameter).
      * @param company Full Company record
-     * @return List of Departments
+     * @return List of Departments, ordered by PID ascending
      */
     List<Department> findDepartmentsOfCompany(Company company);
 

@@ -12,6 +12,8 @@ import org.jooq.conf.Settings;
 import org.jooq.conf.StatementType;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.skife.jdbi.v2.DBI;
+import org.skife.jdbi.v2.logging.SLF4JLog;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 import javax.sql.DataSource;
 
@@ -39,6 +42,7 @@ public class DbTestsApplication {
         Settings ret = new Settings();
         ret.withRenderSchema(false);
         ret.setRenderFormatted(true);
+
         ret.setRenderNameStyle(RenderNameStyle.AS_IS);
         return ret;
     }
@@ -104,6 +108,21 @@ public class DbTestsApplication {
     @Bean
     public EbeanServer ebeanServer(ServerConfig serverConfig) {
         return EbeanServerFactory.create(serverConfig);
+    }
+
+    /*
+     * JDBI Configurations
+     */
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    @Bean
+    public DBI jdbiFactory(DataSource dataSource) {
+        // note that for JDBI we have to wrap datasource with TransactionAwareDataSourceProxy otherwise JDBI won't respect
+        // transactions created by spring
+        TransactionAwareDataSourceProxy transactionAwareDataSourceProxy = new TransactionAwareDataSourceProxy(dataSource);
+        DBI dbi = new DBI(transactionAwareDataSourceProxy);
+        dbi.setSQLLog(new SLF4JLog());  // to enable SLF4J logging
+        return dbi;
     }
 
     public static void main(String[] args) {

@@ -24,6 +24,7 @@ With that conditions in respect, following frameworks were compared:
 * **jOOQ** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jooq/JooqDataRepositoryImpl.java))
 * **MyBatis** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/mybatis/MyBatisDataRepositoryImpl.java) and  [mapper](src/main/resources/mybatis/mappers/DataRepositoryMapper.xml))
 * **EBean** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/ebean/EBeanDataRepositoryImpl.java)) 
+* **JDBI (version 2.77)** (see [implementation](src/main/java/com/clevergang/dbtests/repository/impl/jdbi/JDBIDataRepositoryImpl.java))
 
 I tried to find optimal (== most readable) implementation in every framework, but comments are welcomed! There are lot of comments in the code explaining why I chose such implementation and some FIXMEs on places which I do not like, but which cannot be implemented differently or which I have troubles to improve...
 
@@ -77,7 +78,7 @@ Please note that following remarks are very subjective and does not have to nece
 #### What would I choose
   
 1. If project manager is ok with additional cost of a licence or the project uses one of open source databases (like PostgreSQL) then definitely go with **jOOQ**.
-2. If project uses Oracle, DB2, MSSQL or any other commercial database and additional cost for jOOQ licence is not acceptable, then go with **JDBCTemplate** 
+2. If project uses Oracle, DB2, MSSQL or any other commercial database and additional cost for jOOQ licence is not acceptable, then go with **JDBCTemplate** (for me it wins over other choices for it's maturity and documentation). 
   
 #### Subjective pros/cons of each framework 
 
@@ -122,3 +123,12 @@ Please note that following remarks are very subjective and does not have to nece
   * Logging could be better
   * Allows JPA OneToMany and ManyToOne relations modeling and possibility to "lazy fetch" these relations - actually I do not like this concept at all as it can lead to potentially very ineffective code. Per documentation and experiences of several people on internet EBean behaves better than full blown JPA implementation in this manner, but you can still be hit by the N+1 problem and all the performance traps, which lazy fetching brings... 
   
+**JDBI (version 2.77)**
+  * Pros
+    * I like the fluent style of creating statements and binding parameters - I'd like to see something like that in JDBC Template
+    * Code is generally more readable than jdbc template
+    * Quite easy and understandable batch operations    
+  * Cons
+    * Extremely weak logging :(
+    * Very weak documentation (as of 5.12.2016, version 2.77)
+    * I don't quite like the necessity to open&close handle for each DAO method -> it's little bit unclear for me if the handle should be opened for each method or if it's ok to open one handle per HTTP request... documentation is not much clear about this...

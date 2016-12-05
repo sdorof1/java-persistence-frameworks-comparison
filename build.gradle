@@ -37,7 +37,10 @@ dependencies {
 
             // MyBatis dependencies
             'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1',
-            'com.github.javaplugs:mybatis-types:0.3' // required so mybatis works with java8 datetime classes (LocalDate)
+            'com.github.javaplugs:mybatis-types:0.3', // required so mybatis works with java8 datetime classes (LocalDate)
+            
+            // jdbi dependencies
+            'org.jdbi:jdbi:2.77'
     )
 
     testCompile(
