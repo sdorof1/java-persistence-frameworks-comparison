@@ -7,7 +7,7 @@ apply plugin: 'java'
 apply plugin: 'com.github.kt3k.ebean.enhance'  // required so the enhancer works, see below
 
 // We need Java8 for this project
-tasks.withType(JavaCompile) {
+compileJava {
     sourceCompatibility = '1.8'
 }
 
