@@ -6,11 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -28,10 +28,21 @@ public class JDBCDataRepositoryImpl implements DataRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
+    // NOTE: I would recommend to handle creation and caching of SimpleJdbcInsert instances like depicted here, for two reasons:
+    // 1. In order to SimpleJdbcInsert to be effective, it cannot be created for each call - remember that during first use of
+    // SimpleJdbcInsert, metadata for the table are fetched from database and this costs some time. So best way how to use SimpleJdbcInsert
+    // is to reuse single instance.
+    // 2. I wouldn't put instances of SimpleJdbcInsert to some external cache, but, like here, tie the instance of SimpleJdbcInsert with DAO bean.
+    // That way it's ensured, that when the DAO bean is recreated so are be recreated all SimpleJdbcInsert instances the DAO bean depends on...
+    private final SimpleJdbcInsert insertIntoProject;
+
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     public JDBCDataRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.insertIntoProject = new SimpleJdbcInsert((JdbcTemplate) jdbcTemplate.getJdbcOperations())
+                .withTableName("project")
+                .usingGeneratedKeyColumns("pid");
     }
 
     @Override
@@ -120,29 +131,15 @@ public class JDBCDataRepositoryImpl implements DataRepository {
 
     @Override
     public Integer insertProject(Project project) {
-        logger.info("Inserting project using JDBCTemplate");
-
-        String insertStatement = " INSERT INTO project (name, datestarted) " +
-                " VALUES (:name, :datestarted)";
-
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("name", project.getName())
                 .addValue("datestarted", project.getDate());
 
-        KeyHolder generatedKey = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(insertStatement, params, generatedKey);
-
-        return (Integer) generatedKey.getKeys().get("pid");
+        return insertIntoProject.executeAndReturnKey(params).intValue();
     }
 
     @Override
     public List<Integer> insertProjects(List<Project> projects) {
-        logger.info("Batch inserting projects using JDBCTemplate");
-
-        String insertStatement = " INSERT INTO project (name, datestarted) " +
-                " VALUES (:name, :datestarted)";
-
         MapSqlParameterSource[] paramsList = projects
                 .stream()
                 .map(project -> new MapSqlParameterSource()
@@ -150,7 +147,10 @@ public class JDBCDataRepositoryImpl implements DataRepository {
                         .addValue("datestarted", project.getDate()))
                 .toArray(MapSqlParameterSource[]::new);
 
-        jdbcTemplate.batchUpdate(insertStatement, paramsList);
+        // NOTE: Here we used SimpleJdbcInsert to insert the rows, but you can also use more traditional way
+        // by specifying the statment to be executed (handy when you need to do some customizations of the statement).
+        // See insertDepartments() method for an example.
+        insertIntoProject.executeBatch(paramsList);
 
         // FIXME JDBCTemplate cannot return IDs for every row after batch update!!
         return null;
