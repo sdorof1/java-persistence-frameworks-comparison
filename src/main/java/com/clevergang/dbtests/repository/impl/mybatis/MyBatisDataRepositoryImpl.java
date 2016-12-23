@@ -51,6 +51,11 @@ public class MyBatisDataRepositoryImpl implements DataRepository {
     }
 
     @Override
+    public void removeProject(Integer pid) {
+        sql.removeProject(pid);
+    }
+
+    @Override
     public Department findDepartment(Integer pid) {
         return sql.findDepartment(pid);
     }

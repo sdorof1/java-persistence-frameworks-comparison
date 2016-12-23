@@ -134,5 +134,9 @@
         WHERE pid = #{pid}
     </select>
 
+    <delete id="removeProject">
+        DELETE FROM project
+        WHERE pid = #{pid}
+    </delete>
 
 </mapper>

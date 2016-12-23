@@ -83,6 +83,10 @@ public class JDBIScenariosTest {
         scenarios.executeSimpleStaticStatementScenario();
     }
 
+    @Test
+    public void scenarioTwelve() {
+        scenarios.removeSingleEntityScenario();
+    }
 }
 
 

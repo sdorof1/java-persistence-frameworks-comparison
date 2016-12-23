@@ -76,6 +76,11 @@ public class EBeanDataRepositoryImpl implements DataRepository {
     }
 
     @Override
+    public void removeProject(Integer pid) {
+        ebean.delete(ProjectEntity.class, pid);
+    }
+
+    @Override
     public Department findDepartment(Integer pid) {
         DepartmentEntity departmentEntity = ebean.find(DepartmentEntity.class, pid);
 

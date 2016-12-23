@@ -40,8 +40,8 @@ CREATE TABLE Project (
 );
 
 CREATE TABLE ProjectEmployee (
-  project_pid INTEGER REFERENCES Project ON DELETE NO ACTION,
-  employee_pid INTEGER REFERENCES Employee ON DELETE NO ACTION,
+  project_pid INTEGER REFERENCES Project ON DELETE CASCADE,
+  employee_pid INTEGER REFERENCES Employee ON DELETE CASCADE,
   PRIMARY KEY (project_pid, employee_pid)
 );
 

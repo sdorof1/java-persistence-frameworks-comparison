@@ -343,6 +343,20 @@ public class Scenarios {
         assert output.getName().equals("CleverGang");
         logger.info("Output of scenario 11: {}", output);
     }
+
+    /**
+     * 12. Delete one record by PID
+     * <br/>
+     * Just one of the CRUD operations.
+     */
+    public void removeSingleEntityScenario() {
+        repository.removeProject(2);
+
+        // check some post conditions
+        Integer projectCount = repository.getProjectsCount();
+        assert projectCount == 1;
+    }
+
 }
 
 

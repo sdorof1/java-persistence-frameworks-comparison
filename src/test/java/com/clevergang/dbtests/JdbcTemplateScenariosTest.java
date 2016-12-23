@@ -83,4 +83,9 @@ public class JdbcTemplateScenariosTest {
         scenarios.executeSimpleStaticStatementScenario();
     }
 
+    @Test
+    public void scenarioTwelve() {
+        scenarios.removeSingleEntityScenario();
+    }
+
 }

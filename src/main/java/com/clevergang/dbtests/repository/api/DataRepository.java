@@ -28,8 +28,6 @@ public interface DataRepository {
      */
     Company findCompanyUsingSimpleStaticStatement(Integer pid);
 
-
-
     // Departments
 
     /**
@@ -147,4 +145,11 @@ public interface DataRepository {
      * @return Return count of records in Project table
      */
     Integer getProjectsCount();
+
+    /**
+     * Removes project record from database based on primary key
+     * @param pid Primary key of the project to be removed
+     */
+    void removeProject(Integer pid);
+
 }

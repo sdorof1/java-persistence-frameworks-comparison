@@ -44,4 +44,6 @@ public interface DataRepositoryMapper {
     Employee findEmployee(Integer pid);
 
     Project findProject(Integer pid);
+
+    void removeProject(Integer pid);
 }

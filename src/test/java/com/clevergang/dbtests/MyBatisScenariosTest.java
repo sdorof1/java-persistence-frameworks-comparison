@@ -88,4 +88,9 @@ public class MyBatisScenariosTest {
         scenarios.executeSimpleStaticStatementScenario();
     }
 
+    @Test
+    public void scenarioTwelve() {
+        scenarios.removeSingleEntityScenario();
+    }
+
 }

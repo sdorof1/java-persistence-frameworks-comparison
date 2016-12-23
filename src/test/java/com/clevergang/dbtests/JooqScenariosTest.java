@@ -83,6 +83,11 @@ public class JooqScenariosTest {
         scenarios.executeSimpleStaticStatementScenario();
     }
 
+    @Test
+    public void scenarioTwelve() {
+        scenarios.removeSingleEntityScenario();
+    }
+
 }
 
 

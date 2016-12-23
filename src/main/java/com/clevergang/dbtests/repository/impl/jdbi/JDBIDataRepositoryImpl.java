@@ -70,6 +70,15 @@ public class JDBIDataRepositoryImpl implements DataRepository {
     }
 
     @Override
+    public void removeProject(Integer pid) {
+        try (Handle h = dbi.open()) {
+            h.createStatement("DELETE FROM project WHERE pid = :pid")
+                    .bind("pid", pid)
+                    .execute();
+        }
+    }
+
+    @Override
     public Department findDepartment(Integer pid) {
         try (Handle h = dbi.open()) {
             return h.createQuery("SELECT pid, name, company_pid companyPid FROM department WHERE pid = :pid")

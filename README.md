@@ -47,6 +47,7 @@ These are the scenarios:
 9. Complex select - construct select where conditions based on some boolean conditions + throw in some joins
 10. Call stored procedure/function and process results
 11. Execute query using JDBC simple Statement (not PreparedStatement)
+12. Remove single entity based on primary key
 
 Each scenario has it's implementation in the Scenarios class. See javadoc of [Scenarios](src/main/java/com/clevergang/dbtests/Scenarios.java) methods for more detailed description of each scenario.
 

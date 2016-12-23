@@ -88,4 +88,8 @@ public class EbeanScenariosTest {
         scenarios.executeSimpleStaticStatementScenario();
     }
 
+    @Test
+    public void scenarioTwelve() {
+        scenarios.removeSingleEntityScenario();
+    }
 }

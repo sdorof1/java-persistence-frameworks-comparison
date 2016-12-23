@@ -90,6 +90,13 @@ public class JooqDataRepositoryImpl implements DataRepository {
     }
 
     @Override
+    public void removeProject(Integer pid) {
+        create.deleteFrom(PROJECT)
+                .where(PROJECT.PID.eq(pid))
+                .execute();
+    }
+
+    @Override
     public Department findDepartment(Integer pid) {
         return create.
                 selectFrom(DEPARTMENT)

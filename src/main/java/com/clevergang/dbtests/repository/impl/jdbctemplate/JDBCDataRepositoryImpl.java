@@ -102,6 +102,15 @@ public class JDBCDataRepositoryImpl implements DataRepository {
     }
 
     @Override
+    public void removeProject(Integer pid) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("pid", pid);
+
+        int update = jdbcTemplate.update("DELETE FROM project where pid = :pid", params);
+        assert update == 1;
+    }
+
+    @Override
     public Department findDepartment(Integer pid) {
         String query = "SELECT pid, company_pid, name" +
                 "           FROM department " +
