@@ -13,7 +13,8 @@ I prepared some common scenarios, which you typically need to implement data-cen
 
 ## Frameworks compared
 
-I have following (subjectively evaluated :)) conditions on frameworks which I choose for consideration: 
+I have following (subjectively evaluated :)) conditions on frameworks which I choose for consideration:
+ 
 1. The framework should embrace - not hide - SQL language and RDBMS we are using
 2. The framework must be mature enough for "enterprise level" use.
 3. Can utilize JPA annotations, but must not be full JPA implementation (see "Why only non-JPA?" section below)
