@@ -66,27 +66,11 @@ public class JooqDataRepositoryImpl implements DataRepository {
 
     @Override
     public Company findCompanyUsingSimpleStaticStatement(Integer pid) {
-        // This is the only way I found how to actually do a static Statement in JOOQ (so not the default
-        // prepared statement, but simple static statement where you do not bind values). We create new instance of DSLContext
-        // using Settings which are configured to use static statements. The important factor here is
-        // to create new context based on the Connection of autowired DSLContext (therefore the usage of create.connection()
-        // method) - this is the only way to ensure that the this static statement will be executed in same transaction
-        // as other statements called through autowired DSLContext.
-        //
-        // If you create new DSLContext using the some generally available (autowired) datasource, then you'll create
-        // completely new JOOQ configuration with completely new connection -> such statements will be executed in
-        // their own transactions!
-        //
-        // FIXME: I don't like the usage of AtomicReference here to get the value out of the lambda. If anyone has better class where to store the value, please advise.
-        AtomicReference<Company> reference = new AtomicReference<>();
-        create.connection(connection -> {
-            DSLContext staticStatement = DSL.using(connection, create.dialect(), staticStatementSettings);
-            reference.set(staticStatement.
-                    selectFrom(COMPANY)
-                    .where(COMPANY.PID.eq(pid))
-                    .fetchOneInto(Company.class));
-        });
-        return reference.get();
+        Configuration configuration = create.configuration().derive(staticStatementSettings);
+        return DSL.using(configuration)
+            .selectFrom(COMPANY)
+            .where(COMPANY.PID.eq(pid))
+            .fetchOneInto(Company.class));
     }
 
     @Override
