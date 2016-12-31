@@ -24,7 +24,6 @@ import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static com.clevergang.dbtests.repository.impl.jooq.generated.Tables.*;
@@ -70,7 +69,7 @@ public class JooqDataRepositoryImpl implements DataRepository {
         return DSL.using(configuration)
             .selectFrom(COMPANY)
             .where(COMPANY.PID.eq(pid))
-            .fetchOneInto(Company.class));
+            .fetchOneInto(Company.class);
     }
 
     @Override
