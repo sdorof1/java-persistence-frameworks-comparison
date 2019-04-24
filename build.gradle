@@ -1,24 +1,33 @@
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+		classpath "io.ebean:ebean-gradle-plugin:11.37.1"
+    }
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.1.4.RELEASE'
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'io.ebean'
+
 group = 'com.clevergang'
 version = '1.0.0'
 description = 'Comparison and common patterns for non-JPA SQL mapping frameworks for Java (Jooq, Spring JDBCTemplate etc.)'
-
-apply plugin: 'spring-boot'
-apply plugin: 'java'
-apply plugin: 'com.github.kt3k.ebean.enhance'  // required so the enhancer works, see below
 
 // We need Java8 for this project
 compileJava {
     sourceCompatibility = '1.8'
 }
 
-// this is actually required for EBean to work. EBean needs all @Entity classes to be enhanced before usage
-// for gradle builds this is how the entities are enhanced. See more info here:
-//      http://ebean-orm.github.io/docs/setup/enhancement
-// and here:
-//      https://github.com/kt3k/ebean-enhance-plugin
-ebeanEnhance {
-    packages = 'com.clevergang.dbtests.repository.impl.ebean.entities.**'
-    agentVersion = '8.1.1'
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -32,13 +41,13 @@ dependencies {
             "org.springframework.boot:spring-boot-starter-jooq",
 
             // EBean dependencies
-            "org.avaje.ebean:ebean:9.2.1",
-            "org.avaje.ebean:ebean-spring:7.2.1",
+            'io.ebean:ebean:11.37.1',
+            'io.ebean:ebean-spring-txn:11.10.4',
 
             // MyBatis dependencies
             'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1',
             'com.github.javaplugs:mybatis-types:0.3', // required so mybatis works with java8 datetime classes (LocalDate)
-            
+
             // jdbi dependencies
             'org.jdbi:jdbi:2.77'
     )
@@ -53,22 +62,4 @@ test {
     testLogging {
         events "PASSED", "FAILED", "SKIPPED"
     }
-}
-
-buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE"  // to include SpringBoot parent BOM
-        classpath "gradle.plugin.org.kt3k:ebean-enhance-plugin:2.0.5"
-    }
-}
-
-repositories {
-    jcenter()
-    maven { url "https://jitpack.io" }
 }

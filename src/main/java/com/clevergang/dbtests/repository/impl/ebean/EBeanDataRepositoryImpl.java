@@ -1,8 +1,8 @@
 package com.clevergang.dbtests.repository.impl.ebean;
 
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.SqlRow;
+import io.ebean.Ebean;
+import io.ebean.EbeanServer;
+import io.ebean.SqlRow;
 import com.clevergang.dbtests.repository.api.DataRepository;
 import com.clevergang.dbtests.repository.api.data.*;
 import com.clevergang.dbtests.repository.impl.ebean.entities.CompanyEntity;
@@ -287,7 +287,7 @@ public class EBeanDataRepositoryImpl implements DataRepository {
                 .setParameter("salary", salary)
                 .setParameter("departmentName", departmentName)
                 .setParameter("companyName", companyName)
-                .findUnique();
+                .findOne();
 
         RegisterEmployeeOutput result = new RegisterEmployeeOutput();
         result.setEmployeePid(row.getInteger("employee_id"));

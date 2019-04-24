@@ -1,9 +1,10 @@
 package com.clevergang.dbtests;
 
-import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.EbeanServerFactory;
-import com.avaje.ebean.config.ServerConfig;
-import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
+import io.ebean.EbeanServer;
+import io.ebean.EbeanServerFactory;
+import io.ebean.config.ServerConfig;
+import io.ebean.spring.txn.SpringJdbcTransactionManager;
+
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -98,7 +99,7 @@ public class DbTestsApplication {
         config.setDefaultServer(true);
         config.setDataSource(dataSource);
         config.addPackage("com.clevergang.dbtests.repository.impl.ebean.entities");
-        config.setExternalTransactionManager(new SpringAwareJdbcTransactionManager());
+        config.setExternalTransactionManager(new SpringJdbcTransactionManager());
         config.setAutoCommitMode(false);
         config.setExpressionNativeIlike(true);
 
