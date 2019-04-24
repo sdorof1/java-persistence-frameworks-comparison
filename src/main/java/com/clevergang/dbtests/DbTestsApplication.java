@@ -62,21 +62,19 @@ public class DbTestsApplication {
 
     @Bean
     @Primary
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     public SqlSession myBatisDefaultSession(SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
     @Bean
     @Qualifier("batch-operations")
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     public SqlSession myBatisBatchOperationsSession(DataSource dataSource) throws Exception {
         /*
             NOTE: Unfortunately, in MyBatis it's not possible to execute batch and non-batch operations in single SqlSession.
             To support this scenario, we have to create completely new SqlSessionFactoryBean and completely new
             SqlSession. Surprisingly, this does not necessarily mean that the batch and non-batch operations will be
             executed in different transactions (as we would expect) - we tested this configuration using scenario 8.
-            and it turned out that the bot non-batch and batch operations were run using same connection and in same transaction.
+            and it turned out that the both non-batch and batch operations were run using same connection and in same transaction.
             I guess this has something to do with how connection is obtained by MyBatis from dataSource...
         */
 
@@ -91,7 +89,6 @@ public class DbTestsApplication {
      * EBEAN CONFIGURATIONS
      */
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Bean
     public ServerConfig ebeanServerConfig(DataSource dataSource) {
         ServerConfig config = new ServerConfig();
@@ -115,7 +112,6 @@ public class DbTestsApplication {
      * JDBI Configurations
      */
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Bean
     public DBI jdbiFactory(DataSource dataSource) {
         // note that for JDBI we have to wrap datasource with TransactionAwareDataSourceProxy otherwise JDBI won't respect

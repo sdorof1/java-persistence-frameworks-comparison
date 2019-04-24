@@ -36,7 +36,6 @@ public class JDBCDataRepositoryImpl implements DataRepository {
     // That way it's ensured, that when the DAO bean is recreated so are be recreated all SimpleJdbcInsert instances the DAO bean depends on...
     private final SimpleJdbcInsert insertIntoProject;
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     public JDBCDataRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

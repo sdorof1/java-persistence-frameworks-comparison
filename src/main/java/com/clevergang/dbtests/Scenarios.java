@@ -25,7 +25,6 @@ import static java.util.stream.Collectors.toList;
  *
  * @author Bretislav Wajtr
  */
-@SuppressWarnings("WeakerAccess")
 public class Scenarios {
     private static final Logger logger = LoggerFactory.getLogger(Scenarios.class);
 
